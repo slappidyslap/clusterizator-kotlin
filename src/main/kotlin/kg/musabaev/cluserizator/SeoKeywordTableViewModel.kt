@@ -6,6 +6,6 @@ import javafx.collections.ObservableList
 import javax.inject.Singleton
 
 @Singleton
-class MainViewModel : ViewModel {
+class SeoKeywordTableViewModel : ViewModel {
     val seoKeywords: ObservableList<SeoKeywordModel> = FXCollections.observableArrayList()
 }

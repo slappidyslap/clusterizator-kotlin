@@ -14,18 +14,18 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
-class MainView() : BorderPane(), JavaView<MainViewModel>, Initializable {
+class MainView() : BorderPane(), JavaView<SeoKeywordTableViewModel>, Initializable {
     private val root = TreeItem<SeoKeywordModel>()
     private val treeView = TreeView(root)
     private val splitPane: SplitPane = SplitPane()
 
     @InjectViewModel
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var mainViewModel: SeoKeywordTableViewModel
     @Inject
     private lateinit var testService: TestService
 
     @Inject
-    constructor(mainViewModel: MainViewModel, testService: TestService) : this() {
+    constructor(mainViewModel: SeoKeywordTableViewModel, testService: TestService) : this() {
         this.mainViewModel = mainViewModel
         this.testService = testService
     }
