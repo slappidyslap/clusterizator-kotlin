@@ -5,25 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="da5f83e8-d1b7-45be-89eb-6d03b899223f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/kg/musabaev/cluserizator/DynamicTableViewExample.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/kg/musabaev/cluserizator/FileHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/kg/musabaev/cluserizator/Launcher.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/kg/musabaev/cluserizator/MainView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/kg/musabaev/cluserizator/MainViewModel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/kg/musabaev/cluserizator/SeoKeywordModel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/kg/musabaev/cluserizator/SeoTreeItem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/kg/musabaev/cluserizator/TestCsvFileHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/kg/musabaev/cluserizator/TestService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/kg/musabaev/cluserizator/TextFieldTreeCellImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/kg/musabaev/cluserizator/TreeCellGraphic.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenicView.properties" beforeDir="false" afterPath="$PROJECT_DIR$/scenicView.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/kg/musabaev/cluserizator/Launcher.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/kg/musabaev/cluserizator/Launcher.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/kg/musabaev/cluserizator/MainView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/kg/musabaev/cluserizator/MainView.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,6 +105,8 @@
       <recent name="D:\JvmProjects\cluserizator-26-12" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\JvmProjects\cluserizator-26-12\src\main\resources" />
+      <recent name="D:\JvmProjects\cluserizator-26-12\src\main\java" />
       <recent name="D:\JvmProjects\cluserizator-26-12\src\main\kotlin" />
       <recent name="D:\JvmProjects\cluserizator-26-12\src\main\java\kg\musabaev\cluserizator" />
     </key>

@@ -9,5 +9,7 @@ module kg.musabaev.cluserizator {
     requires kotlin.stdlib;
 
     opens kg.musabaev.cluserizator to de.saxsys.mvvmfx;
+    opens kg.musabaev.cluserizator.graph to de.saxsys.mvvmfx;
     exports kg.musabaev.cluserizator;
+    exports kg.musabaev.cluserizator.graph;
 }
