@@ -30,7 +30,7 @@ application {
 }
 
 javafx {
-  version = '17.0.6'
+  version = '21.0.5'
   modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing']
 }
 
@@ -39,8 +39,8 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 
-  implementation 'de.saxsys:mvvmfx:1.8.1-SNAPSHOT'
-//  implementation 'de.saxsys:mvvmfx-easydi:1.8.1-SNAPSHOT'
+  implementation 'de.saxsys:mvvmfx:1.9.0-SNAPSHOT'
+  implementation 'de.saxsys:mvvmfx-easydi:1.9.0-SNAPSHOT'
 }
 
 test {

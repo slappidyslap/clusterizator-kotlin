@@ -4,6 +4,9 @@ import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import javax.inject.Singleton;
+
+@Singleton
 public class SeoKeywordModel implements ViewModel {
     private final SimpleIntegerProperty id;
     private final SimpleStringProperty keyword;

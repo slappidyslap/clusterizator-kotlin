@@ -3,14 +3,11 @@ package kg.musabaev.cluserizator;
 import de.saxsys.mvvmfx.InjectViewModel;
 import de.saxsys.mvvmfx.JavaView;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 
+import javax.inject.Inject;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
@@ -22,9 +19,15 @@ public class MainView extends BorderPane implements JavaView<MainViewModel>, Ini
 
     @InjectViewModel
     private MainViewModel mainViewModel;
+    @Inject
+    private TestService testService;
+
+    @Inject
+    public MainView(MainViewModel mainViewModel, TestService testService) {
+        this.testService = testService;
+    }
 
     public MainView() {
-
     }
 
     @Override
@@ -35,6 +38,7 @@ public class MainView extends BorderPane implements JavaView<MainViewModel>, Ini
 
 
         super.setCenter(treeView);
+        testService.consoleLog();
 
         FileHandler testCsvFileHandler = new TestCsvFileHandler();
 
@@ -51,6 +55,7 @@ public class MainView extends BorderPane implements JavaView<MainViewModel>, Ini
             i.getAndSet(i.get() + 1);
 
             root.getChildren().add(new TreeItem<>(seoKeyword));
+            mainViewModel.getSeoKeywords().add(seoKeyword);
         });
 //        initStyles();
     }
