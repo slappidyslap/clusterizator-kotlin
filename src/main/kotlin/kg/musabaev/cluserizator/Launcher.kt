@@ -5,13 +5,15 @@ import de.saxsys.mvvmfx.easydi.MvvmfxEasyDIApplication
 import javafx.scene.Scene
 import javafx.stage.Stage
 import kg.musabaev.cluserizator.graph.GraphView
-import org.scenicview.ScenicView
+import kg.musabaev.cluserizator.graph.MainView
+import kg.musabaev.cluserizator.graph.SeoKeywordTableView
 
 class Launcher : MvvmfxEasyDIApplication() {
     @Throws(Exception::class)
     override fun startMvvmfx(stage: Stage) {
         val viewTuple = FluentViewLoader.javaView(MainView::class.java).load()
         FluentViewLoader.javaView(GraphView::class.java).load()
+        FluentViewLoader.javaView(SeoKeywordTableView::class.java).load()
 
         stage.title = "Hello!"
         val scene = Scene(viewTuple.view)

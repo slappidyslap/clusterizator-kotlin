@@ -2,10 +2,6 @@
 <html lang="en">
 <head>
   <title>Network</title>
-  <script
-          type="text/javascript"
-          src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"
-  ></script>
   <style>
     html, body {
       margin: 0;
@@ -26,6 +22,7 @@
 </head>
 <body>
 <div id="mynetwork"></div>
+<script type="text/javascript" src="../../../lib/vis-network.min.js"></script>
 <script type="text/javascript">
   // create an array with nodes
   var nodes = new vis.DataSet([
@@ -52,23 +49,26 @@
     edges: edges,
   };
   const options = {
-  "edges": {
-    "smooth": {
-      "forceDirection": "none"
-    }
-  },
-  "physics": {
-    "forceAtlas2Based": {
-      "springLength": 100
+    "edges": {
+      "smooth": {
+        "forceDirection": "none"
+      }
     },
-    "minVelocity": 0.75,
-    "solver": "forceAtlas2Based"
+    "physics": {
+      "forceAtlas2Based": {
+        "springLength": 100
+      },
+      "minVelocity": 0.75,
+      "solver": "forceAtlas2Based"
+    }
   }
-}
   var network = new vis.Network(container, data, options);
-  // setInterval(() => {
-  //   document.getElementById("mynetwork").style.backgroundColor = `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`
-  // }, 500)
+  window.graph = network
+  network.on('selectNode', e => {
+    document.getElementById("mynetwork").style.backgroundColor = `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`
+    GraphView.selectEdge(e.nodes[0])
+  });
 </script>
+<!--<script type="text/javascript" src="../../../lib/firebug/firebug.js"></script>-->
 </body>
 </html>
