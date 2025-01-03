@@ -7,12 +7,12 @@ import javafx.beans.property.SimpleStringProperty;
 public class SeoKeywordModel implements ViewModel {
     private final SimpleIntegerProperty id;
     private final SimpleStringProperty keyword;
-//    private final String[] otherMetas;
+    private final String[] otherMetas;
 
-    public SeoKeywordModel(int id, String keyword/*, String[] otherMetas*/) {
+    public SeoKeywordModel(int id, String keyword, String[] otherMetas) {
         this.id = new SimpleIntegerProperty(id);
         this.keyword = new SimpleStringProperty(keyword);
-//        this.otherMetas = otherMetas;
+        this.otherMetas = otherMetas;
     }
 
     public int getId() {
@@ -37,5 +37,9 @@ public class SeoKeywordModel implements ViewModel {
 
     public SimpleStringProperty keywordProperty() {
         return keyword;
+    }
+
+    public String[] getOtherMetas() {
+        return otherMetas;
     }
 }

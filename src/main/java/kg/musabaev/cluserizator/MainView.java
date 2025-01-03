@@ -5,32 +5,36 @@ import de.saxsys.mvvmfx.JavaView;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class MainView extends VBox implements JavaView<MainViewModel>, Initializable {
+public class MainView extends BorderPane implements JavaView<MainViewModel>, Initializable {
 
-    private final TableView<SeoKeywordModel> tableView = new TableView<>();
+    private final TreeItem<SeoKeywordModel> root = new TreeItem<>();
+    private final TreeView<SeoKeywordModel> treeView = new TreeView<>(root);
 
     @InjectViewModel
     private MainViewModel mainViewModel;
 
     public MainView() {
-        super.getChildren().add(tableView);
+
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        TableColumn<SeoKeywordModel, Integer> idColumn = new TableColumn<>("");
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        treeView.setEditable(true);
+        treeView.setCellFactory(p -> new TextFieldTreeCellImpl());
+        treeView.setShowRoot(false);
 
-        TableColumn<SeoKeywordModel, String> keyColumn = new TableColumn<>("Ключевое слово");
-        keyColumn.setCellValueFactory(new PropertyValueFactory<>("keyword"));
-        tableView.getColumns().addAll(idColumn, keyColumn);
+
+        super.setCenter(treeView);
 
         FileHandler testCsvFileHandler = new TestCsvFileHandler();
 
@@ -43,12 +47,11 @@ public class MainView extends VBox implements JavaView<MainViewModel>, Initializ
             Integer id = i.get();
             String keyword = values[0];
 
-            SeoKeywordModel seoKeyword = new SeoKeywordModel(id, keyword/*, otherMetas*/);
+            SeoKeywordModel seoKeyword = new SeoKeywordModel(id, keyword, otherMetas);
             i.getAndSet(i.get() + 1);
 
-            mainViewModel.getSeoKeywords().add(seoKeyword);
+            root.getChildren().add(new TreeItem<>(seoKeyword));
         });
-        tableView.setItems(mainViewModel.getSeoKeywords());
 //        initStyles();
     }
 
