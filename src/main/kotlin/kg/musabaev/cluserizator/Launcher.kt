@@ -10,15 +10,11 @@ import kg.musabaev.cluserizator.menu.TestMenuView
 import kg.musabaev.cluserizator.view.GraphView
 import kg.musabaev.cluserizator.view.MainView
 import kg.musabaev.cluserizator.view.SeoKeywordTableView
-import kg.musabaev.cluserizator.viewmodel.SeoClusterMapModel
+import kg.musabaev.cluserizator.viewmodel.GraphViewModel
 
 class Launcher : MvvmfxEasyDIApplication() {
     @Throws(Exception::class)
     override fun startMvvmfx(stage: Stage) {
-//        val easyDi = EasyDI();
-//        MvvmFX.setCustomDependencyInjector{easyDi}
-//        MvvmFX.setCustomDependencyInjector { easyDi }
-
         val viewTuple = FluentViewLoader.javaView(MainView::class.java).load()
         FluentViewLoader.javaView(GraphView::class.java).load()
         FluentViewLoader.javaView(SeoKeywordTableView::class.java).load()
@@ -43,8 +39,7 @@ class Launcher : MvvmfxEasyDIApplication() {
 
     override fun initEasyDi(context: EasyDI) {
         context.bindProvider(MenuView::class.java) {
-            val clazz = context.getInstance(SeoClusterMapModel::class.java)
-            TestMenuView(clazz);
+            TestMenuView(context.getInstance(GraphViewModel::class.java))
         }
     }
 }

@@ -6,7 +6,7 @@ import javafx.collections.FXCollections
 import javax.inject.Singleton
 
 @Singleton
-class SeoClusterViewModel : ViewModel {
+private class SeoClusterViewModel : ViewModel {
     val node = SimpleStringProperty()
     val edges = FXCollections.observableArrayList<String>()
     val seoKeywords = FXCollections.observableArrayList<String>()

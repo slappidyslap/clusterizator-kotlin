@@ -2,7 +2,8 @@ package kg.musabaev.cluserizator.menu
 
 import javafx.collections.FXCollections
 import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
-import kg.musabaev.cluserizator.viewmodel.SeoClusterMapModel
+import kg.musabaev.cluserizator.viewmodel.ClusterNode
+import kg.musabaev.cluserizator.viewmodel.GraphViewModel
 import kg.musabaev.cluserizator.viewmodel.SeoKeywordModel
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
@@ -11,11 +12,11 @@ import javax.inject.Singleton
 @Singleton
 class TestMenuView() : MenuView() {
 
-    private lateinit var clusterMapModel: SeoClusterMapModel
+    private lateinit var graphViewModel: GraphViewModel
 
     @Inject
-    constructor(clusterMapModel: SeoClusterMapModel) : this() {
-        this.clusterMapModel = clusterMapModel
+    constructor(graphViewModel: GraphViewModel) : this() {
+        this.graphViewModel = graphViewModel
     }
 
     override fun loadFile() {
@@ -32,9 +33,15 @@ class TestMenuView() : MenuView() {
             i.getAndSet(i.get() + 1)
             a.add(seoKeyword)
         }
-        clusterMapModel.clusterMap["1"] = FXCollections.observableArrayList(a.subList(0, a.size / 2))
-        clusterMapModel.clusterMap["2"] = FXCollections.observableArrayList(a.subList(a.size / 2, a.size))
-        println("loadFile $clusterMapModel")
+        graphViewModel.setClusterNode(ClusterNode(
+            id = "1",
+            seoKeywords = a.subList(0, a.size / 2),
+            adjacentNodes = listOf(ClusterNode(
+                id = "2",
+                seoKeywords = a.subList(a.size / 2, a.size),
+                adjacentNodes = emptyList()
+            ))
+        ))
     }
 
     override fun saveFile() {

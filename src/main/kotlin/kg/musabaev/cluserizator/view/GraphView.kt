@@ -9,7 +9,6 @@ import javafx.scene.web.WebView
 import kg.musabaev.cluserizator.util.JsFunction
 import kg.musabaev.cluserizator.util.Utils
 import kg.musabaev.cluserizator.viewmodel.GraphViewModel
-import kg.musabaev.cluserizator.viewmodel.SeoClusterViewModel
 import kg.musabaev.cluserizator.viewmodel.SeoKeywordTableViewModel
 import netscape.javascript.JSObject
 import java.net.URL
@@ -25,13 +24,11 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
     @InjectViewModel
     private lateinit var graphViewModel: GraphViewModel
     private lateinit var keywordTableViewModel: SeoKeywordTableViewModel
-    private lateinit var clusterViewModel: SeoClusterViewModel
 
     @Inject
-    constructor(graphViewModel: GraphViewModel, keywordTableViewModel: SeoKeywordTableViewModel, clusterViewModel: SeoClusterViewModel) : this() {
+    constructor(graphViewModel: GraphViewModel, keywordTableViewModel: SeoKeywordTableViewModel) : this() {
         this.graphViewModel = graphViewModel
         this.keywordTableViewModel = keywordTableViewModel
-        this.clusterViewModel = clusterViewModel
     }
 
 //        webEngine.getLoadWorker().stateProperty()
@@ -57,12 +54,16 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
     }
 
     private fun initListeners() {
+        webView.engine.loadWorker.stateProperty().addListener {_, _, newVal ->
+            if (newVal == Worker.State.SUCCEEDED) {
+                val windowJs: JSObject = webEngine.executeScript("window") as JSObject
 
+            }
+        }
     }
 
     @JsFunction
     fun selectEdge(id: String) {
-        println(clusterViewModel)
-        graphViewModel.selectedGraphId.set(id)
+        graphViewModel.setSelectedGraphId(id)
     }
 }

@@ -9,7 +9,6 @@ import javafx.scene.control.TableView
 import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.layout.BorderPane
 import kg.musabaev.cluserizator.viewmodel.GraphViewModel
-import kg.musabaev.cluserizator.viewmodel.SeoClusterMapModel
 import kg.musabaev.cluserizator.viewmodel.SeoKeywordModel
 import kg.musabaev.cluserizator.viewmodel.SeoKeywordTableViewModel
 import java.net.URL
@@ -25,13 +24,11 @@ class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTa
     @InjectViewModel
     private lateinit var keywordTableViewModel: SeoKeywordTableViewModel
     private lateinit var graphViewModel: GraphViewModel
-    private lateinit var clusterMapModel: SeoClusterMapModel
 
     @Inject
-    constructor(keywordTableViewModel: SeoKeywordTableViewModel, graphViewModel: GraphViewModel, clusterMapModel: SeoClusterMapModel) : this() {
+    constructor(keywordTableViewModel: SeoKeywordTableViewModel, graphViewModel: GraphViewModel) : this() {
         this.keywordTableViewModel = keywordTableViewModel
         this.graphViewModel = graphViewModel
-        this.clusterMapModel = clusterMapModel
     }
 
     override fun initialize(p0: URL?, p1: ResourceBundle?) {
@@ -62,13 +59,12 @@ class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTa
 
     private fun initListeners() {
         // TODO проверить что newVal не null
-
-        graphViewModel.selectedGraphId.addListener { _, _, newVal ->
-            println(clusterMapModel.clusterMap[newVal])
-            clusterMapModel.clusterMap[newVal].let {
-                keywordTableViewModel.keywords.setAll(it)
-                println(keywordTableViewModel.keywords.map { it.getKeyword() })
-            }
-        }
+        table.selectionModelProperty()
+//        graphViewModel.selectedGraphIdProperty().addListener { _, _, newVal ->
+//            clusterMapModel.clusterMap[newVal].let {
+//                keywordTableViewModel.keywords.setAll(it)
+//                println(keywordTableViewModel.keywords.map { it.getKeyword() })
+//            }
+//        }
     }
 }
