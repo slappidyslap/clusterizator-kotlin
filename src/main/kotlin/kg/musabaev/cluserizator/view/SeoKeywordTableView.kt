@@ -3,21 +3,17 @@ package kg.musabaev.cluserizator.view
 import de.saxsys.mvvmfx.InjectViewModel
 import de.saxsys.mvvmfx.JavaView
 import javafx.beans.binding.Bindings
-import javafx.collections.FXCollections
 import javafx.fxml.Initializable
 import javafx.scene.control.TableColumn
 import javafx.scene.control.TableView
 import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.layout.BorderPane
-import javafx.util.Callback
-import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
 import kg.musabaev.cluserizator.viewmodel.GraphViewModel
 import kg.musabaev.cluserizator.viewmodel.SeoClusterMapModel
 import kg.musabaev.cluserizator.viewmodel.SeoKeywordModel
 import kg.musabaev.cluserizator.viewmodel.SeoKeywordTableViewModel
 import java.net.URL
 import java.util.*
-import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -56,10 +52,6 @@ class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTa
         table.columns.addAll(idColumn, keyColumn)
         super.setCenter(table)
         Bindings.bindContentBidirectional(table.items, keywordTableViewModel.keywords)
-
-
-        // TODO
-        fillTestCluster()
 //        println("hello")
 //        println(clusterMapModel.clusterMap.toString())
 //        println("До вставки ${table.items}")
@@ -78,24 +70,5 @@ class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTa
                 println(keywordTableViewModel.keywords.map { it.getKeyword() })
             }
         }
-    }
-
-    private fun fillTestCluster() {
-        val i = AtomicReference(1)
-        val a = FXCollections.observableArrayList<SeoKeywordModel>()
-        TestCsvFileHandler().getLinesCsv().forEach { line ->
-            println("initTableView$i")
-            val values = line.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            val otherMetas = values.copyOfRange(1, values.lastIndex - 1)
-            val id = i.get()
-            val keyword = values[0]
-
-            val seoKeyword = SeoKeywordModel(id.toString(), keyword, otherMetas)
-            i.getAndSet(i.get() + 1)
-            a.add(seoKeyword)
-        }
-        println(keywordTableViewModel.keywords.map { it.getKeyword() }.size)
-        clusterMapModel.clusterMap["1"] = FXCollections.observableArrayList(a.subList(0, a.size / 2))
-        clusterMapModel.clusterMap["2"] = FXCollections.observableArrayList(a.subList(a.size / 2, a.size))
     }
 }

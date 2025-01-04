@@ -9,12 +9,15 @@ module kg.musabaev.cluserizator {
     requires javax.inject;
     requires kotlin.stdlib;
     requires jdk.jsobject;
+    requires easy.di;
 
     exports kg.musabaev.cluserizator;
     exports kg.musabaev.cluserizator.view;
     exports kg.musabaev.cluserizator.viewmodel;
+    exports kg.musabaev.cluserizator.menu;
 
     opens kg.musabaev.cluserizator to de.saxsys.mvvmfx;
     opens kg.musabaev.cluserizator.view to de.saxsys.mvvmfx;
     opens kg.musabaev.cluserizator.viewmodel to de.saxsys.mvvmfx;
+
 }

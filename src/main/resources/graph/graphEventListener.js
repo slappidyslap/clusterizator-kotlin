@@ -1,8 +1,17 @@
+/*function getRandomPastelColor() {
+    const r = Math.floor((Math.random() * 128) + 127);
+    const g = Math.floor((Math.random() * 128) + 127);
+    const b = Math.floor((Math.random() * 128) + 127);
+    const alpha = 0.5;
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}*/
+
+// Темная тема
 function getRandomPastelColor() {
-    const r = Math.floor((Math.random() * 128) + 127); // Компонент красного (127-255)
-    const g = Math.floor((Math.random() * 128) + 127); // Компонент зеленого (127-255)
-    const b = Math.floor((Math.random() * 128) + 127); // Компонент синего (127-255)
-    const alpha = 0.5; // Низкая прозрачность
+    const r = Math.floor((Math.random() * 64));
+    const g = Math.floor((Math.random() * 64));
+    const b = Math.floor((Math.random() * 64));
+    const alpha = 0.2;
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 

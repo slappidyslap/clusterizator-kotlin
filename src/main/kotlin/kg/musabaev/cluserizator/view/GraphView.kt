@@ -46,6 +46,7 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
         webEngine.load(Utils.getResourcePath("graph/graphView.html"))
         super.setCenter(webView)
 
+
         webView.engine.loadWorker.stateProperty().addListener {_, _, newVal ->
             if (newVal == Worker.State.SUCCEEDED) {
                 val windowJs: JSObject = webEngine.executeScript("window") as JSObject
@@ -55,9 +56,13 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
         }
     }
 
+    private fun initListeners() {
+
+    }
+
     @JsFunction
     fun selectEdge(id: String) {
-        println(id)
+        println(clusterViewModel)
         graphViewModel.selectedGraphId.set(id)
     }
 }
