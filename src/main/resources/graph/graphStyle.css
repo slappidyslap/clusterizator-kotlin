@@ -4,11 +4,24 @@ html, body {
   width: 100%;
   height: 100%;
 }
+
+/* Темный режим */
 body {
-  background: linear-gradient( #e7e7e7, transparent 1px), linear-gradient( 90deg, #e7e7e7, transparent 1px);
+  background-color: #121212;
+  background-image: 
+    linear-gradient(#1e1e1e, transparent 1px),
+    linear-gradient(90deg, #1e1e1e, transparent 1px);
   background-size: 15px 15px;
   background-position: center center;
 }
+
+/* Светлый режим */
+/* body {
+  background: linear-gradient( #e7e7e7, transparent 1px), linear-gradient( 90deg, #e7e7e7, transparent 1px);
+  background-size: 15px 15px;
+  background-position: center center;
+} */
+
 #graph {
   transition: 1s;
   width: 100%;
