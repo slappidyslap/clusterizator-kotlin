@@ -1,4 +1,4 @@
-package kg.musabaev.cluserizator
+package kg.musabaev.cluserizator.viewmodel
 
 import de.saxsys.mvvmfx.ViewModel
 import javafx.collections.FXCollections
@@ -7,5 +7,5 @@ import javax.inject.Singleton
 
 @Singleton
 class SeoKeywordTableViewModel : ViewModel {
-    val seoKeywords: ObservableList<SeoKeywordModel> = FXCollections.observableArrayList()
+    val keywords: ObservableList<SeoKeywordModel> = FXCollections.observableArrayList()
 }

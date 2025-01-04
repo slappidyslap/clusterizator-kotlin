@@ -1,4 +1,4 @@
-package kg.musabaev.cluserizator
+package kg.musabaev.cluserizator.saveload
 
 import java.util.stream.Stream
 

@@ -4,9 +4,10 @@ import de.saxsys.mvvmfx.FluentViewLoader
 import de.saxsys.mvvmfx.easydi.MvvmfxEasyDIApplication
 import javafx.scene.Scene
 import javafx.stage.Stage
-import kg.musabaev.cluserizator.graph.GraphView
-import kg.musabaev.cluserizator.graph.MainView
-import kg.musabaev.cluserizator.graph.SeoKeywordTableView
+import kg.musabaev.cluserizator.view.GraphView
+import kg.musabaev.cluserizator.view.MainView
+import kg.musabaev.cluserizator.view.SeoKeywordTableView
+import org.scenicview.ScenicView
 
 class Launcher : MvvmfxEasyDIApplication() {
     @Throws(Exception::class)

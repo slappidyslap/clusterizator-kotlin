@@ -1,13 +1,16 @@
-package kg.musabaev.cluserizator.graph
+package kg.musabaev.cluserizator.view
 
 import de.saxsys.mvvmfx.InjectViewModel
 import de.saxsys.mvvmfx.JavaView
 import javafx.concurrent.Worker
 import javafx.fxml.Initializable
-import javafx.scene.control.Label
 import javafx.scene.layout.BorderPane
 import javafx.scene.web.WebView
-import kg.musabaev.cluserizator.*
+import kg.musabaev.cluserizator.util.JsFunction
+import kg.musabaev.cluserizator.util.Utils
+import kg.musabaev.cluserizator.viewmodel.GraphViewModel
+import kg.musabaev.cluserizator.viewmodel.SeoClusterViewModel
+import kg.musabaev.cluserizator.viewmodel.SeoKeywordTableViewModel
 import netscape.javascript.JSObject
 import java.net.URL
 import java.util.*
@@ -22,11 +25,13 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
     @InjectViewModel
     private lateinit var graphViewModel: GraphViewModel
     private lateinit var keywordTableViewModel: SeoKeywordTableViewModel
+    private lateinit var clusterViewModel: SeoClusterViewModel
 
     @Inject
-    constructor(graphViewModel: GraphViewModel, keywordTableViewModel: SeoKeywordTableViewModel) : this() {
+    constructor(graphViewModel: GraphViewModel, keywordTableViewModel: SeoKeywordTableViewModel, clusterViewModel: SeoClusterViewModel) : this() {
         this.graphViewModel = graphViewModel
         this.keywordTableViewModel = keywordTableViewModel
+        this.clusterViewModel = clusterViewModel
     }
 
 //        webEngine.getLoadWorker().stateProperty()
@@ -38,7 +43,7 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
 //            }
 
     override fun initialize(p0: URL?, p1: ResourceBundle?) {
-        webEngine.load(Utils.getResourcePath("graph.html"))
+        webEngine.load(Utils.getResourcePath("graph/graphView.html"))
         super.setCenter(webView)
 
         webView.engine.loadWorker.stateProperty().addListener {_, _, newVal ->
@@ -52,17 +57,7 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
 
     @JsFunction
     fun selectEdge(id: String) {
-        println("$id selected")
-//            keywordTableViewModel.seoKeywords.add(SeoKeywordModel(1, "1", arrayOf("1")))
+        println(id)
+        graphViewModel.selectedGraphId.set(id)
     }
-}
-
-fun WebView.executeScriptLater(script: String): Any? {
-    var any: Any? = null
-    this.engine.loadWorker.stateProperty().addListener {_, _, newVal ->
-        if (newVal == Worker.State.SUCCEEDED) {
-            any = this.engine.executeScript(script)
-        }
-    }
-    return any
 }

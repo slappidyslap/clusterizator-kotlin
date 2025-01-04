@@ -1,0 +1,16 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+body {
+  background: linear-gradient( #e7e7e7, transparent 1px), linear-gradient( 90deg, #e7e7e7, transparent 1px);
+  background-size: 15px 15px;
+  background-position: center center;
+}
+#graph {
+  transition: 1s;
+  width: 100%;
+  height: 100%;
+}

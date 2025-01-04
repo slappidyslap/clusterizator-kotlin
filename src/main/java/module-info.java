@@ -10,8 +10,11 @@ module kg.musabaev.cluserizator {
     requires kotlin.stdlib;
     requires jdk.jsobject;
 
-    opens kg.musabaev.cluserizator to de.saxsys.mvvmfx;
-    opens kg.musabaev.cluserizator.graph to de.saxsys.mvvmfx;
     exports kg.musabaev.cluserizator;
-    exports kg.musabaev.cluserizator.graph;
+    exports kg.musabaev.cluserizator.view;
+    exports kg.musabaev.cluserizator.viewmodel;
+
+    opens kg.musabaev.cluserizator to de.saxsys.mvvmfx;
+    opens kg.musabaev.cluserizator.view to de.saxsys.mvvmfx;
+    opens kg.musabaev.cluserizator.viewmodel to de.saxsys.mvvmfx;
 }

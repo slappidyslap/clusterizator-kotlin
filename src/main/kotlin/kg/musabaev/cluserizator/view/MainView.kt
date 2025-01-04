@@ -1,10 +1,10 @@
-package kg.musabaev.cluserizator.graph
+package kg.musabaev.cluserizator.view
 
 import de.saxsys.mvvmfx.JavaView
 import javafx.fxml.Initializable
 import javafx.scene.control.SplitPane
 import javafx.scene.layout.BorderPane
-import kg.musabaev.cluserizator.SeoKeywordTableViewModel
+import kg.musabaev.cluserizator.viewmodel.SeoKeywordTableViewModel
 import java.net.URL
 import java.util.*
 import javax.inject.Inject
