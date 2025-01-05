@@ -57,7 +57,6 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
                     val clusterNodeId = change.key
                     val clusterNode = change.valueAdded
 
-//                    if (graphClusterMap.map.contains(clusterNodeId)) return@MapChangeListener
                     // Если нода не имеет соседей, то просто создаем его
                     if (clusterNode.neighborClusterIds().isEmpty()) {
                         webEngine.executeScriptSafely("addNode('${clusterNodeId}')")
@@ -78,7 +77,8 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
         }
         for (neighborClusterId in graphClusterMap.map[nodeId]!!.neighborClusterIds()) {
             addNodesRecursively(neighborClusterId)
-            webEngine.executeScriptSafely("addNode('${neighborClusterId}')")
+            webEngine.executeScriptSafely("addNode('$neighborClusterId')")
+            webEngine.executeScriptSafely("addEdge('$nodeId', '$neighborClusterId')")
         }
     }
 
