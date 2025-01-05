@@ -3,14 +3,13 @@ package kg.musabaev.cluserizator.view
 import de.saxsys.mvvmfx.InjectViewModel
 import de.saxsys.mvvmfx.JavaView
 import javafx.beans.binding.Bindings
+import javafx.collections.ObservableList
 import javafx.fxml.Initializable
 import javafx.scene.control.TableColumn
 import javafx.scene.control.TableView
 import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.layout.BorderPane
-import kg.musabaev.cluserizator.viewmodel.GraphViewModel
-import kg.musabaev.cluserizator.viewmodel.SeoKeywordModel
-import kg.musabaev.cluserizator.viewmodel.SeoKeywordTableViewModel
+import kg.musabaev.cluserizator.viewmodel.*
 import java.net.URL
 import java.util.*
 import javax.inject.Inject
@@ -24,11 +23,13 @@ class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTa
     @InjectViewModel
     private lateinit var keywordTableViewModel: SeoKeywordTableViewModel
     private lateinit var graphViewModel: GraphViewModel
+    private lateinit var graphClusterMap: GraphClusterMap
 
     @Inject
-    constructor(keywordTableViewModel: SeoKeywordTableViewModel, graphViewModel: GraphViewModel) : this() {
+    constructor(keywordTableViewModel: SeoKeywordTableViewModel, graphViewModel: GraphViewModel, graphClusterMap: GraphClusterMap) : this() {
         this.keywordTableViewModel = keywordTableViewModel
         this.graphViewModel = graphViewModel
+        this.graphClusterMap = graphClusterMap
     }
 
     override fun initialize(p0: URL?, p1: ResourceBundle?) {
@@ -60,11 +61,10 @@ class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTa
     private fun initListeners() {
         // TODO проверить что newVal не null
         table.selectionModelProperty()
-//        graphViewModel.selectedGraphIdProperty().addListener { _, _, newVal ->
-//            clusterMapModel.clusterMap[newVal].let {
-//                keywordTableViewModel.keywords.setAll(it)
-//                println(keywordTableViewModel.keywords.map { it.getKeyword() })
-//            }
-//        }
+        graphViewModel.selectedGraphIdProperty().addListener { _, _, newVal ->
+            graphClusterMap.map[newVal].let {
+                keywordTableViewModel.keywords.setAll(it!!.seoKeywords())
+            }
+        }
     }
 }

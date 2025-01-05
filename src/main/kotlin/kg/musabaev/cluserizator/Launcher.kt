@@ -3,6 +3,7 @@ package kg.musabaev.cluserizator
 import de.saxsys.mvvmfx.FluentViewLoader
 import de.saxsys.mvvmfx.easydi.MvvmfxEasyDIApplication
 import eu.lestard.easydi.EasyDI
+import javafx.collections.FXCollections
 import javafx.scene.Scene
 import javafx.stage.Stage
 import kg.musabaev.cluserizator.menu.MenuView
@@ -10,6 +11,7 @@ import kg.musabaev.cluserizator.menu.TestMenuView
 import kg.musabaev.cluserizator.view.GraphView
 import kg.musabaev.cluserizator.view.MainView
 import kg.musabaev.cluserizator.view.SeoKeywordTableView
+import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
 import kg.musabaev.cluserizator.viewmodel.GraphViewModel
 
 class Launcher : MvvmfxEasyDIApplication() {
@@ -39,7 +41,7 @@ class Launcher : MvvmfxEasyDIApplication() {
 
     override fun initEasyDi(context: EasyDI) {
         context.bindProvider(MenuView::class.java) {
-            TestMenuView(context.getInstance(GraphViewModel::class.java))
+            TestMenuView(context.getInstance(GraphClusterMap::class.java))
         }
     }
 }

@@ -1,9 +1,9 @@
 package kg.musabaev.cluserizator.menu
 
-import javafx.collections.FXCollections
+import javafx.collections.FXCollections.observableArrayList
 import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
-import kg.musabaev.cluserizator.viewmodel.ClusterNode
-import kg.musabaev.cluserizator.viewmodel.GraphViewModel
+import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
+import kg.musabaev.cluserizator.viewmodel.GraphClusterValue
 import kg.musabaev.cluserizator.viewmodel.SeoKeywordModel
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
@@ -12,16 +12,16 @@ import javax.inject.Singleton
 @Singleton
 class TestMenuView() : MenuView() {
 
-    private lateinit var graphViewModel: GraphViewModel
+    private lateinit var graphClusterMap: GraphClusterMap
 
     @Inject
-    constructor(graphViewModel: GraphViewModel) : this() {
-        this.graphViewModel = graphViewModel
+    constructor(graphClusterMap: GraphClusterMap) : this() {
+        this.graphClusterMap = graphClusterMap
     }
 
     override fun loadFile() {
         val i = AtomicReference(1)
-        val a = FXCollections.observableArrayList<SeoKeywordModel>()
+        val a = observableArrayList<SeoKeywordModel>()
         TestCsvFileHandler().getLinesCsv().forEach { line ->
             println("initTableView$i")
             val values = line.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -33,15 +33,15 @@ class TestMenuView() : MenuView() {
             i.getAndSet(i.get() + 1)
             a.add(seoKeyword)
         }
-        graphViewModel.setClusterNode(ClusterNode(
-            id = "1",
-            seoKeywords = a.subList(0, a.size / 2),
-            adjacentNodes = listOf(ClusterNode(
-                id = "2",
-                seoKeywords = a.subList(a.size / 2, a.size),
-                adjacentNodes = emptyList()
-            ))
-        ))
+        val node22 = GraphClusterValue(
+            clusterId = "22",
+            seoKeywords = observableArrayList(a.subList(a.size / 2, a.size)),
+            neighbors = emptyList())
+        graphClusterMap.map["11"] = GraphClusterValue(
+            clusterId = "11",
+            seoKeywords = observableArrayList(a.subList(0, a.size / 2)),
+            neighbors = listOf(node22))
+        graphClusterMap.map["22"] = node22
     }
 
     override fun saveFile() {

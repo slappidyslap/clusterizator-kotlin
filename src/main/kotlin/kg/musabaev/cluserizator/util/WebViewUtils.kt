@@ -1,6 +1,7 @@
 package kg.musabaev.cluserizator.util
 
 import javafx.concurrent.Worker
+import javafx.scene.web.WebEngine
 import javafx.scene.web.WebView
 
 fun WebView.executeScriptLater(script: String): Any? {
@@ -11,4 +12,13 @@ fun WebView.executeScriptLater(script: String): Any? {
         }
     }
     return any
+}
+
+fun WebEngine.executeScriptSafely(script: String): Any? {
+    try {
+        return this.executeScript(script)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return null
+    }
 }
