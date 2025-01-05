@@ -1,3 +1,7 @@
+## 05.01
+![](./media/unknown_2025.01.05-19.53.gif)
+
+
 https://visjs.github.io/vis-network/examples/network/events/interactionEvents.html
 
 
