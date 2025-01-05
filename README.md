@@ -5,6 +5,9 @@
 https://visjs.github.io/vis-network/examples/network/events/interactionEvents.html
 
 
+https://habr.com/ru/articles/319604/
+
+
 Разные способы представления графа используются в зависимости от задачи, структуры графа и требований к памяти и времени выполнения. Вот основные способы представления графа:
 
 ---

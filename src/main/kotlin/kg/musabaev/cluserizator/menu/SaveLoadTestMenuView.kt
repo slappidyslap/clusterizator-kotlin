@@ -1,18 +1,21 @@
 package kg.musabaev.cluserizator.menu
 
 import javafx.collections.FXCollections.observableArrayList
+import javafx.collections.ObservableMap
 import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
 import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
 import kg.musabaev.cluserizator.viewmodel.GraphClusterValue
 import kg.musabaev.cluserizator.viewmodel.SeoKeywordModel
+import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TestMenuView() : MenuView() {
+class SaveLoadTestMenuView() : MenuView() {
 
     private lateinit var graphClusterMap: GraphClusterMap
 
@@ -22,6 +25,14 @@ class TestMenuView() : MenuView() {
     }
 
     override fun loadFile() {
+        ObjectInputStream(FileInputStream("test.seoclztr")).use { input ->
+            val graphClusterMapFromFile = input.readObject() as GraphClusterMap
+            graphClusterMap.map.putAll(graphClusterMapFromFile.map)
+//            graphClusterMapFromFile = null ??? TODO() в памяти все еще хранится объект graphClusterMapFromFile и graphClusterMap.map
+        }
+    }
+
+    override fun saveFile() {
         val i = AtomicReference(1)
         val a = observableArrayList<SeoKeywordModel>()
         TestCsvFileHandler().getLinesCsv().forEach { line ->
@@ -44,9 +55,9 @@ class TestMenuView() : MenuView() {
             seoKeywords = observableArrayList(a.subList(0, a.size / 2)),
             neighborClusterIds = listOf("22"))
         graphClusterMap.map["22"] = node22
-    }
 
-    override fun saveFile() {
-
+        ObjectOutputStream(FileOutputStream("test.seoclztr")).use { output ->
+            output.writeObject(graphClusterMap)
+        }
     }
 }

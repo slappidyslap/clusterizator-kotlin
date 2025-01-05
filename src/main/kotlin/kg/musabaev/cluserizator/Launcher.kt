@@ -7,6 +7,7 @@ import javafx.collections.FXCollections
 import javafx.scene.Scene
 import javafx.stage.Stage
 import kg.musabaev.cluserizator.menu.MenuView
+import kg.musabaev.cluserizator.menu.SaveLoadTestMenuView
 import kg.musabaev.cluserizator.menu.TestMenuView
 import kg.musabaev.cluserizator.view.GraphView
 import kg.musabaev.cluserizator.view.MainView
@@ -41,7 +42,7 @@ class Launcher : MvvmfxEasyDIApplication() {
 
     override fun initEasyDi(context: EasyDI) {
         context.bindProvider(MenuView::class.java) {
-            TestMenuView(context.getInstance(GraphClusterMap::class.java))
+            SaveLoadTestMenuView(context.getInstance(GraphClusterMap::class.java))
         }
     }
 }

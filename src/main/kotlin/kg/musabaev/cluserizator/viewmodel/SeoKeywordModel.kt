@@ -4,25 +4,47 @@ import de.saxsys.mvvmfx.ViewModel
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
+import javafx.collections.FXCollections.observableArrayList
+import java.io.Externalizable
+import java.io.ObjectInput
+import java.io.ObjectOutput
 import javax.inject.Singleton
 
-@Singleton
-class SeoKeywordModel(id: String, keyword: String, otherMetas: Array<String>) : ViewModel {
+class SeoKeywordModel() : ViewModel, Externalizable {
 
-    private val idProperty = SimpleStringProperty(id)
-    private val keywordProperty = SimpleStringProperty(keyword)
-    private val otherMetasProperty = FXCollections.observableArrayList(otherMetas)
+    constructor(id: Int, keyword: String, otherMetas: Array<String>) : this() {
+        idProperty.set(id)
+        keywordProperty.set(keyword)
+        otherMetasProperty.addAll(otherMetas)
+    }
 
-    fun getId(): String { return idProperty.get() }
-    fun getKeyword(): String { return keywordProperty.get() }
+    private val idProperty = SimpleIntegerProperty()
+    private val keywordProperty = SimpleStringProperty()
+    private val otherMetasProperty = observableArrayList<String>()
 
-    fun setId(id: String) { idProperty.set(id) }
-    fun setKeyword(keyword: String) { keywordProperty.set(keyword) }
+    fun getId() = idProperty.get()
+    fun getKeyword() = keywordProperty.get()
 
-    fun idProperty(): SimpleStringProperty { return idProperty }
-    fun keywordProperty(): SimpleStringProperty { return keywordProperty }
+    fun setId(id: Int) = idProperty.set(id)
+    fun setKeyword(keyword: String) = keywordProperty.set(keyword)
+
+    fun idProperty() = idProperty
+    fun keywordProperty() = keywordProperty
+    fun otherMetas() = otherMetasProperty
 
     override fun toString(): String {
         return "SeoKeywordModel(keyword=${keywordProperty.get()})"
+    }
+
+    override fun writeExternal(out: ObjectOutput) {
+        out.writeInt(getId())
+        out.writeUTF(getKeyword())
+        out.writeObject(otherMetasProperty.toList())
+    }
+
+    override fun readExternal(input: ObjectInput) {
+        setId(input.readInt())
+        setKeyword(input.readUTF())
+        otherMetas().addAll(observableArrayList(input.readObject() as List<String>))
     }
 }

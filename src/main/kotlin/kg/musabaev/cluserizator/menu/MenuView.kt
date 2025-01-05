@@ -11,7 +11,7 @@ abstract class MenuView : MenuBar(), JavaView<MenuViewModel> {
     init {
         menus.addAll(Menu("Файл").apply {
             items.addAll(
-                MenuItem("Открыть").apply { setOnAction { saveFile() } },
+                MenuItem("Сохранить").apply { setOnAction { saveFile() } },
                 MenuItem("Загрузить").apply { setOnAction { loadFile() } }
             )
         })
