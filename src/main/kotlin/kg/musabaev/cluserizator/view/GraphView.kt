@@ -59,7 +59,7 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
 
 //                    if (graphClusterMap.map.contains(clusterNodeId)) return@MapChangeListener
                     // Если нода не имеет соседей, то просто создаем его
-                    if (clusterNode.neighbors().isEmpty()) {
+                    if (clusterNode.neighborClusterIds().isEmpty()) {
                         webEngine.executeScriptSafely("addNode('${clusterNodeId}')")
                     } else {
                         addNodesRecursively(clusterNodeId)
@@ -76,9 +76,9 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
         if (graphClusterMap.map[nodeId] == null) {
             return
         }
-        for (neighbor in graphClusterMap.map[nodeId]!!.neighbors()) {
-            addNodesRecursively(neighbor.getClusterId())
-            webEngine.executeScriptSafely("addNode('${neighbor.getClusterId()}')")
+        for (neighborClusterId in graphClusterMap.map[nodeId]!!.neighborClusterIds()) {
+            addNodesRecursively(neighborClusterId)
+            webEngine.executeScriptSafely("addNode('${neighborClusterId}')")
         }
     }
 
