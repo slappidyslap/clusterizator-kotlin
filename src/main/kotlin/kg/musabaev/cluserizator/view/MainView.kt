@@ -2,35 +2,28 @@ package kg.musabaev.cluserizator.view
 
 import de.saxsys.mvvmfx.JavaView
 import javafx.fxml.Initializable
-import javafx.scene.control.SplitPane
 import javafx.scene.layout.BorderPane
 import kg.musabaev.cluserizator.menu.MenuView
-import kg.musabaev.cluserizator.viewmodel.SeoKeywordTableViewModel
+import kg.musabaev.cluserizator.viewmodel.MainViewModel
 import java.net.URL
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MainView() : BorderPane(), JavaView<SeoKeywordTableViewModel>, Initializable {
-
-    private val splitPane = SplitPane()
+class MainView() : BorderPane(), JavaView<MainViewModel>, Initializable {
 
     private lateinit var menuView: MenuView
-    private lateinit var graphView: GraphView
-    private lateinit var seoKeywordTableView: SeoKeywordTableView
+    private lateinit var contentView: ContentView
 
     @Inject
-    constructor(menuView: MenuView, graphView: GraphView, seoKeywordTableView: SeoKeywordTableView) : this() {
+    constructor(menuView: MenuView, contentView: ContentView) : this() {
         this.menuView = menuView
-        this.graphView = graphView
-        this.seoKeywordTableView = seoKeywordTableView
+        this.contentView = contentView
     }
 
-    override fun initialize(url: URL?, resourceBundle: ResourceBundle?) {
+    override fun initialize(p0: URL?, p1: ResourceBundle?) {
         super.setTop(menuView)
-
-        splitPane.items.addAll(graphView, seoKeywordTableView)
-        super.setCenter(splitPane)
+        super.setCenter(contentView)
     }
 }

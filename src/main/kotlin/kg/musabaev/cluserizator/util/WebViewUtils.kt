@@ -18,6 +18,7 @@ fun WebEngine.executeScriptSafely(script: String): Any? {
     try {
         return this.executeScript(script)
     } catch (e: Exception) {
+        if (e.message!!.contains("item with id 22 already exists")) return null
         e.printStackTrace()
         return null
     }

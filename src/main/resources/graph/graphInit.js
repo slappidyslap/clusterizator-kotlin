@@ -1,15 +1,7 @@
-// create an array with nodes
-const nodes = new vis.DataSet([
-  { id: 1, label: "Node 1" },
-  { id: 2, label: "Node 2" },
-]);
+const nodes = new vis.DataSet([]);
 
-// create an array with edges
-const edges = new vis.DataSet([
-  { from: 1, to: 2 },
-]);
+const edges = new vis.DataSet([]);
 
-// create a network
 const container = document.getElementById("graph");
 const data = {nodes, edges};
 const options = {

@@ -3,25 +3,25 @@ package kg.musabaev.cluserizator
 import de.saxsys.mvvmfx.FluentViewLoader
 import de.saxsys.mvvmfx.easydi.MvvmfxEasyDIApplication
 import eu.lestard.easydi.EasyDI
-import javafx.collections.FXCollections
 import javafx.scene.Scene
 import javafx.stage.Stage
 import kg.musabaev.cluserizator.menu.MenuView
 import kg.musabaev.cluserizator.menu.SaveLoadTestMenuView
 import kg.musabaev.cluserizator.menu.TestMenuView
-import kg.musabaev.cluserizator.view.GraphView
-import kg.musabaev.cluserizator.view.MainView
-import kg.musabaev.cluserizator.view.SeoKeywordTableView
+import kg.musabaev.cluserizator.view.*
 import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
-import kg.musabaev.cluserizator.viewmodel.GraphViewModel
+import org.scenicview.ScenicView
 
 class Launcher : MvvmfxEasyDIApplication() {
     @Throws(Exception::class)
     override fun startMvvmfx(stage: Stage) {
         val viewTuple = FluentViewLoader.javaView(MainView::class.java).load()
+        // MenuView создается вручную снизу с конкретной реализацией
+        FluentViewLoader.javaView(ToolBarView::class.java).load()
+        FluentViewLoader.javaView(ContentView::class.java).load()
+        FluentViewLoader.javaView(TestMenuView::class.java).load()
         FluentViewLoader.javaView(GraphView::class.java).load()
         FluentViewLoader.javaView(SeoKeywordTableView::class.java).load()
-        FluentViewLoader.javaView(TestMenuView::class.java).load()
 
         stage.title = "Hello!"
         val scene = Scene(viewTuple.view)

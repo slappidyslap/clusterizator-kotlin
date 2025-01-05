@@ -12,23 +12,17 @@ import javax.inject.Singleton
 
 class SeoKeywordModel() : ViewModel, Externalizable {
 
-    constructor(id: Int, keyword: String, otherMetas: Array<String>) : this() {
-        idProperty.set(id)
+    constructor(keyword: String, otherMetas: Array<String>) : this() {
         keywordProperty.set(keyword)
         otherMetasProperty.addAll(otherMetas)
     }
-
-    private val idProperty = SimpleIntegerProperty()
     private val keywordProperty = SimpleStringProperty()
     private val otherMetasProperty = observableArrayList<String>()
 
-    fun getId() = idProperty.get()
     fun getKeyword() = keywordProperty.get()
 
-    fun setId(id: Int) = idProperty.set(id)
     fun setKeyword(keyword: String) = keywordProperty.set(keyword)
 
-    fun idProperty() = idProperty
     fun keywordProperty() = keywordProperty
     fun otherMetas() = otherMetasProperty
 
@@ -37,14 +31,23 @@ class SeoKeywordModel() : ViewModel, Externalizable {
     }
 
     override fun writeExternal(out: ObjectOutput) {
-        out.writeInt(getId())
         out.writeUTF(getKeyword())
         out.writeObject(otherMetasProperty.toList())
     }
 
     override fun readExternal(input: ObjectInput) {
-        setId(input.readInt())
         setKeyword(input.readUTF())
         otherMetas().addAll(observableArrayList(input.readObject() as List<String>))
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as SeoKeywordModel
+        return keywordProperty.get() == other.keywordProperty.get()
+    }
+
+    override fun hashCode(): Int {
+        return keywordProperty.get().hashCode()
     }
 }

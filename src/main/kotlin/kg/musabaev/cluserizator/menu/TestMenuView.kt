@@ -31,7 +31,7 @@ class TestMenuView() : MenuView() {
             val id = i.get()
             val keyword = values[0]
 
-            val seoKeyword = SeoKeywordModel(id, keyword, otherMetas)
+            val seoKeyword = SeoKeywordModel(keyword, otherMetas)
             i.getAndSet(i.get() + 1)
             a.add(seoKeyword)
         }

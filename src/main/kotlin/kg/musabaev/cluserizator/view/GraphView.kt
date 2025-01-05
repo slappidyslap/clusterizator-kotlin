@@ -21,6 +21,7 @@ import javax.inject.Singleton
 
 @Singleton
 class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
+
     private val webView = WebView()
     private val webEngine = webView.engine
 

@@ -15,6 +15,9 @@ class GraphClusterValue(): Externalizable {
         neighborClusterIdsProperty.addAll(neighborClusterIds)
     }
 
+    constructor(clusterId: String, seoKeywords: List<SeoKeywordModel>)
+            : this(clusterId, seoKeywords, mutableListOf())
+
     private val clusterIdProperty = SimpleStringProperty()
     private val seoKeywordsProperty = observableArrayList<SeoKeywordModel>()
     private val neighborClusterIdsProperty = observableArrayList<String>()

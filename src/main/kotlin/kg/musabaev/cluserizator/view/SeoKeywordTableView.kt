@@ -40,7 +40,7 @@ class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTa
     private fun initTableView() {
         println("initTableView0")
         val idColumn = TableColumn<SeoKeywordModel, String>("ID").apply {
-            cellValueFactory = PropertyValueFactory("id")
+//            cellValueFactory = PropertyValueFactory("id")
         }
 
         val keyColumn = TableColumn<SeoKeywordModel, String>("Ключевое слово").apply {
@@ -50,12 +50,6 @@ class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTa
         table.columns.addAll(idColumn, keyColumn)
         super.setCenter(table)
         Bindings.bindContentBidirectional(table.items, keywordTableViewModel.keywords)
-//        println("hello")
-//        println(clusterMapModel.clusterMap.toString())
-//        println("До вставки ${table.items}")
-//        keywordTableViewModel.keywords.setAll(clusterMapModel.clusterMap["1"])
-//        println("После вставки ${table.items}")
-
     }
 
     private fun initListeners() {

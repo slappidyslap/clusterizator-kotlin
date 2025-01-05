@@ -39,10 +39,9 @@ class SaveLoadTestMenuView() : MenuView() {
             println("initTableView$i")
             val values = line.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             val otherMetas = values.copyOfRange(1, values.lastIndex - 1)
-            val id = i.get()
             val keyword = values[0]
 
-            val seoKeyword = SeoKeywordModel(id, keyword, otherMetas)
+            val seoKeyword = SeoKeywordModel(keyword, otherMetas)
             i.getAndSet(i.get() + 1)
             a.add(seoKeyword)
         }
