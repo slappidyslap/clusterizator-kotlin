@@ -60,10 +60,10 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
 
                     // Если нода не имеет соседей, то просто создаем его
                     if (clusterNode.neighborClusterIds().isEmpty()) {
-                        webEngine.executeScriptSafely("addNode('${clusterNodeId}')")
+                        webEngine.executeScriptSafely("${this.javaClass.simpleName}Js.addNode('${clusterNodeId}')")
                     } else {
                         addNodesRecursively(clusterNodeId)
-                        webEngine.executeScriptSafely("addNode('$clusterNodeId')")
+                        webEngine.executeScriptSafely("${this.javaClass.simpleName}Js.addNode('$clusterNodeId')")
                     }
                 }
                 change.wasRemoved() -> { TODO() }
@@ -78,13 +78,27 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
         }
         for (neighborClusterId in graphClusterMap.map[nodeId]!!.neighborClusterIds()) {
             addNodesRecursively(neighborClusterId)
-            webEngine.executeScriptSafely("addNode('$neighborClusterId')")
-            webEngine.executeScriptSafely("addEdge('$nodeId', '$neighborClusterId')")
+            webEngine.executeScriptSafely("${this.javaClass.simpleName}Js.addNode('$neighborClusterId')")
+            webEngine.executeScriptSafely("${this.javaClass.simpleName}Js.addEdge('$nodeId', '$neighborClusterId')")
         }
     }
 
     @JsFunction
-    fun selectEdge(id: String) {
+    fun selectNode(id: String) {
         graphViewModel.setSelectedGraphId(id)
     }
+
+    @JsFunction
+    fun deselectNode() {
+        graphViewModel.setSelectedGraphId("")
+    }
+
+    /*private fun callJsFunction(funcName: String, vararg params: String) {
+        val className = this.javaClass.simpleName
+        val paramsAsString = params.joinToString(
+            separator = ",",
+            transform = { "'$it'" }
+        )
+        webEngine.executeScriptSafely("${className}Js.$funcName(${paramsAsString})")
+    }*/
 }

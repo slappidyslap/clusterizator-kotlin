@@ -53,11 +53,13 @@ class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTa
     }
 
     private fun initListeners() {
-        // TODO проверить что newVal не null
-        table.selectionModelProperty()
         graphViewModel.selectedGraphIdProperty().addListener { _, _, newVal ->
-            graphClusterMap.map[newVal].let {
-                keywordTableViewModel.keywords.setAll(it!!.seoKeywords())
+            if (newVal == null || newVal.isEmpty()) {
+                keywordTableViewModel.keywords.clear()  // TODO может вместо clear есть другой способ
+            } else {
+                graphClusterMap.map[newVal].let {
+                    keywordTableViewModel.keywords.setAll(it!!.seoKeywords()) // TODO может вместо setAll есть другой способ
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 package kg.musabaev.cluserizator.view
 
 import de.saxsys.mvvmfx.JavaView
+import javafx.beans.binding.Bindings
 import javafx.fxml.Initializable
 import javafx.scene.control.Button
 import javafx.scene.control.TextField
@@ -36,6 +37,10 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
     }
 
     private fun initListeners() {
+        // Есть нода не выбрана, то кнопка должна быть отключена
+        addNodeBtn.disableProperty().bind(
+            Bindings.isEmpty(graphViewModel.selectedGraphIdProperty()))
+
         // При нажатии на кнопку
         addNodeBtn.setOnAction { e ->
             val clusterId = regexInput.text

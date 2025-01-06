@@ -17,8 +17,15 @@ function getRandomPastelColor() {
 
 graph.on('selectNode', e => {
   document.getElementById("graph").style.backgroundColor = getRandomPastelColor()
-  GraphView.selectEdge(e.nodes[0])
+  GraphViewJs.selectedGraphId = e.nodes[0]
+  GraphView.selectNode(e.nodes[0])
 });
+
+graph.on('deselectNode', e => {
+  document.getElementById("graph").style.backgroundColor = ''
+  GraphViewJs.selectedGraphId = ''
+  GraphView.deselectNode()
+})
 
 network.on('dragEnd', function(){
   graph.unselectAll();
@@ -27,3 +34,7 @@ network.on('dragEnd', function(){
 network.on('dragEnd', function(){
   graph.unselectAll();
 });
+
+graph.on('click', e => {
+    if (e.nodes) {}
+})
