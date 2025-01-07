@@ -23,7 +23,7 @@ body {
 } */
 
 #graph {
-  transition: 0.5s;
+  transition: 0.3s;
   width: 100%;
   height: 100%;
 }
