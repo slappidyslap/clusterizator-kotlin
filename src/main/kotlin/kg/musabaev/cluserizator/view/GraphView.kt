@@ -6,6 +6,7 @@ import javafx.collections.MapChangeListener
 import javafx.concurrent.Worker
 import javafx.fxml.Initializable
 import javafx.scene.layout.BorderPane
+import javafx.scene.web.WebEngine
 import javafx.scene.web.WebView
 import kg.musabaev.cluserizator.util.JsFunction
 import kg.musabaev.cluserizator.util.Utils
@@ -60,10 +61,10 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
 
                     // Если нода не имеет соседей, то просто создаем его
                     if (clusterNode.neighborClusterIds().isEmpty()) {
-                        webEngine.executeScriptSafely("${this.javaClass.simpleName}Js.addNode('${clusterNodeId}')")
+                        webEngine.addNode(clusterNodeId)
                     } else {
                         addNodesRecursively(clusterNodeId)
-                        webEngine.executeScriptSafely("${this.javaClass.simpleName}Js.addNode('$clusterNodeId')")
+                        webEngine.addNode(clusterNodeId)
                     }
                 }
                 change.wasRemoved() -> { TODO() }
@@ -72,14 +73,11 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
     }
 
     private fun addNodesRecursively(nodeId: String) {
-        // тут априори не может быть null, но потом все равно добавить проверку
-        if (graphClusterMap.map[nodeId] == null) {
-            return
-        }
+        if (graphClusterMap.map[nodeId] == null) return
         for (neighborClusterId in graphClusterMap.map[nodeId]!!.neighborClusterIds()) {
             addNodesRecursively(neighborClusterId)
-            webEngine.executeScriptSafely("${this.javaClass.simpleName}Js.addNode('$neighborClusterId')")
-            webEngine.executeScriptSafely("${this.javaClass.simpleName}Js.addEdge('$nodeId', '$neighborClusterId')")
+            webEngine.addNode(neighborClusterId)
+            webEngine.addEdge(nodeId, neighborClusterId)
         }
     }
 
@@ -93,12 +91,11 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
         graphViewModel.setSelectedGraphId("")
     }
 
-    /*private fun callJsFunction(funcName: String, vararg params: String) {
-        val className = this.javaClass.simpleName
-        val paramsAsString = params.joinToString(
-            separator = ",",
-            transform = { "'$it'" }
-        )
-        webEngine.executeScriptSafely("${className}Js.$funcName(${paramsAsString})")
-    }*/
+    private fun WebEngine.addNode(id: String) {
+        this.executeScriptSafely("GraphViewJs.addNode('$id')")
+    }
+
+    private fun WebEngine.addEdge(from: String, to: String) {
+        this.executeScriptSafely("GraphViewJs.addEdge('$from', '$to')")
+    }
 }
