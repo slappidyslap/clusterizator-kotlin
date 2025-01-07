@@ -3,13 +3,15 @@ package kg.musabaev.cluserizator.view
 import de.saxsys.mvvmfx.InjectViewModel
 import de.saxsys.mvvmfx.JavaView
 import javafx.beans.binding.Bindings
-import javafx.collections.ObservableList
 import javafx.fxml.Initializable
 import javafx.scene.control.TableColumn
 import javafx.scene.control.TableView
 import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.layout.BorderPane
-import kg.musabaev.cluserizator.viewmodel.*
+import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
+import kg.musabaev.cluserizator.viewmodel.GraphViewModel
+import kg.musabaev.cluserizator.viewmodel.SeoKeywordModel
+import kg.musabaev.cluserizator.viewmodel.SeoKeywordTableViewModel
 import java.net.URL
 import java.util.*
 import javax.inject.Inject
@@ -38,7 +40,6 @@ class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTa
     }
 
     private fun initTableView() {
-        println("initTableView0")
         val idColumn = TableColumn<SeoKeywordModel, String>("ID").apply {
 //            cellValueFactory = PropertyValueFactory("id")
         }

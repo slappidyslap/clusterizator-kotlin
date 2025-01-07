@@ -58,10 +58,15 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
                 change.wasAdded() -> {
                     val clusterNodeId = change.key
                     val clusterNode = change.valueAdded
+                    val parentClusterNodeId = clusterNode.getParentClusterId()
+
 
                     // Если нода не имеет соседей, то просто создаем его
                     if (clusterNode.neighborClusterIds().isEmpty()) {
                         webEngine.addNode(clusterNodeId)
+                        if (parentClusterNodeId.isNotEmpty()) {
+                            webEngine.addEdge(parentClusterNodeId, clusterNodeId)
+                        }
                     } else {
                         addNodesRecursively(clusterNodeId)
                         webEngine.addNode(clusterNodeId)

@@ -2,25 +2,41 @@ package kg.musabaev.cluserizator.viewmodel
 
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections.observableArrayList
-import javafx.collections.ObservableList
 import java.io.Externalizable
 import java.io.ObjectInput
 import java.io.ObjectOutput
 
 class GraphClusterValue(): Externalizable {
 
-    constructor(clusterId: String, seoKeywords: List<SeoKeywordModel>, neighborClusterIds: List<String>) : this() {
+    constructor(
+        parentClusterId: String,
+        clusterId: String,
+        seoKeywords: List<SeoKeywordModel>,
+        neighborClusterIds: List<String>
+    ) : this() {
+        parentClusterIdProperty.set(parentClusterId)
         clusterIdProperty.set(clusterId)
         seoKeywordsProperty.addAll(seoKeywords)
         neighborClusterIdsProperty.addAll(neighborClusterIds)
     }
 
-    constructor(clusterId: String, seoKeywords: List<SeoKeywordModel>)
-            : this(clusterId, seoKeywords, mutableListOf())
+    constructor(parentClusterId: String, clusterId: String, seoKeywords: List<SeoKeywordModel>)
+            : this(parentClusterId, clusterId, seoKeywords, mutableListOf())
 
+    constructor(clusterId: String, seoKeywords: List<SeoKeywordModel>, neighborClusterIds: List<String>)
+            : this("", clusterId, seoKeywords, neighborClusterIds)
+
+    constructor(clusterId: String, seoKeywords: List<SeoKeywordModel>)
+            : this("", clusterId, seoKeywords, mutableListOf())
+
+    private val parentClusterIdProperty = SimpleStringProperty()
     private val clusterIdProperty = SimpleStringProperty()
     private val seoKeywordsProperty = observableArrayList<SeoKeywordModel>()
     private val neighborClusterIdsProperty = observableArrayList<String>()
+
+    fun getParentClusterId() = parentClusterIdProperty.get()
+    fun setParentClusterId(id: String) = parentClusterIdProperty.set(id)
+    fun parentClusterIdProperty() = parentClusterIdProperty
 
     fun getClusterId() = clusterIdProperty.get()
     fun setClusterId(id: String) = clusterIdProperty.set(id)

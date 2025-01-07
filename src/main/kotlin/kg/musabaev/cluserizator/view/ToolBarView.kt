@@ -6,7 +6,6 @@ import javafx.animation.KeyValue
 import javafx.animation.Timeline
 import javafx.beans.binding.Bindings
 import javafx.fxml.Initializable
-import javafx.scene.Node
 import javafx.scene.control.Button
 import javafx.scene.control.TextField
 import javafx.scene.layout.HBox
@@ -74,15 +73,16 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
             // Ищем все ключи в соответствии regex
             val matchedKeywords = seoKeywordTableViewModel
                 .keywords
-                .filter { it.getKeyword().matches(Regex(regexInput.text)) }
+                .filter { it.getKeyword().contains(Regex(regexInput.text)) }
+            val parentClusterId = graphViewModel.getSelectedGraphId()
 
             // В глобальное хранилище добавляем новую ноду - кластеризуем ключи
-            graphClusterMap.map[clusterId] = GraphClusterValue(clusterId, matchedKeywords)
+            graphClusterMap.map[clusterId] = GraphClusterValue(parentClusterId, clusterId, matchedKeywords)
 
-            // Раз кластеризовали ключи, удаляем из старого кластера
-            graphClusterMap.map[graphViewModel.getSelectedGraphId()]!!
-                .seoKeywords()
-                .removeAll(matchedKeywords)
+            // Раз кластеризовали ключи, удаляем из старого кластера и добавляем дочернюю ноду в список из родительской ноды
+            val parentCluster = graphClusterMap.map[parentClusterId]!!
+            parentCluster.seoKeywords().removeAll(matchedKeywords)
+            parentCluster.neighborClusterIds().add(clusterId)
         }
 
         graphViewModel.selectedGraphIdProperty().addListener { _, _, newVal ->
