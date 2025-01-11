@@ -54,27 +54,7 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
     }
 
     private fun initListeners() {
-        toolBarViewModel.btnCurrentColorBgProperty().addListener { _, _, newVal ->
-            if (newVal == null) {
-                addNodeBtn.removeStyle("-fx-background-color")
-                deleteNodeBtn.removeStyle("-fx-background-color")
-            }
-            else {
-                addNodeBtn.setStyle("-fx-background-color", getRgbStringByColor(newVal))
-                deleteNodeBtn.setStyle("-fx-background-color", getRgbStringByColor(newVal))
-            }
-        }
-        toolBarViewModel.btnCurrentColorFgProperty().addListener { _, _, newVal ->
-            if (newVal == null) {
-                addNodeBtn.removeStyle("-fx-text-fill")
-                deleteNodeBtn.removeStyle("-fx-text-fill")
-            }
-            else {
-                addNodeBtn.setStyle("-fx-text-fill", getRgbStringByColor(newVal))
-                deleteNodeBtn.setStyle("-fx-text-fill", getRgbStringByColor(newVal))
-            }
-        }
-
+        initBtnsColorsListeners()
         initAddNodeBtnListeners()
         initDeleteNodeBtnListeners()
     }
@@ -83,16 +63,6 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
         // Есть нода не выбрана, то кнопка должна быть отключена
         addNodeBtn.disableProperty().bind(
             Bindings.isEmpty(graphViewModel.selectedClusterIdProperty()))
-
-        // При выборе ноды изменять цвет кнопки на более контрастный относительно фона
-        graphViewModel.selectedClusterIdProperty().addListener { _, _, newVal ->
-            val colors = getBgAndFgColorByString(newVal)
-
-//            animateAddNodeBtnFill(colors.first, colors.second)
-
-            toolBarViewModel.setBtnCurrentBgColor(colors.first)
-            toolBarViewModel.setBtnCurrentFgColor(colors.second)
-        }
 
         // При нажатии на кнопку, добавить новую ноду и изменить таблицу
         addNodeBtn.setOnAction {
@@ -118,15 +88,6 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
         deleteNodeBtn.disableProperty().bind(
             Bindings.isEmpty(graphViewModel.selectedClusterIdProperty()))
 
-        graphViewModel.selectedClusterIdProperty().addListener { _, _, newVal ->
-            val colors = getBgAndFgColorByString(newVal)
-
-//            animateAddNodeBtnFill(colors.first, colors.second)
-
-            toolBarViewModel.setBtnCurrentBgColor(colors.first)
-            toolBarViewModel.setBtnCurrentFgColor(colors.second)
-        }
-
         // При нажатии на кнопку, удалить выбранную ноду изменить таблицу
         deleteNodeBtn.setOnAction {
             val selectedCluster =  graphClusters[graphViewModel.getSelectedClusterId()]!!
@@ -148,6 +109,38 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
             // Удаляем из мапы и из списка соседей у родителя
             graphClusters.map.remove(selectedCluster.getId())
             parentCluster.neighbors().remove(selectedCluster)
+        }
+    }
+
+    private fun initBtnsColorsListeners() {
+        graphViewModel.selectedClusterIdProperty().addListener { _, _, selectedClusterId ->
+            val colors = getBgAndFgColorByString(selectedClusterId)
+
+//            animateBtnsFill(colors.first, colors.second)
+
+            toolBarViewModel.setBtnsBgColor(colors.first)
+            toolBarViewModel.setBtnsFgColor(colors.second)
+        }
+
+        toolBarViewModel.btnsColorBgProperty().addListener { _, _, selectedClusterId ->
+            if (selectedClusterId == null) {
+                addNodeBtn.removeStyle("-fx-background-color")
+                deleteNodeBtn.removeStyle("-fx-background-color")
+            }
+            else {
+                addNodeBtn.setStyle("-fx-background-color", getRgbStringByColor(selectedClusterId))
+                deleteNodeBtn.setStyle("-fx-background-color", getRgbStringByColor(selectedClusterId))
+            }
+        }
+        toolBarViewModel.btnsColorFgProperty().addListener { _, _, selectedClusterId ->
+            if (selectedClusterId == null) {
+                addNodeBtn.removeStyle("-fx-text-fill")
+                deleteNodeBtn.removeStyle("-fx-text-fill")
+            }
+            else {
+                addNodeBtn.setStyle("-fx-text-fill", getRgbStringByColor(selectedClusterId))
+                deleteNodeBtn.setStyle("-fx-text-fill", getRgbStringByColor(selectedClusterId))
+            }
         }
     }
 
@@ -181,10 +174,10 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
         return "rgb(${color.red * 255},${color.green * 255},${color.blue * 255})"
     }
 
-    private fun animateAddNodeBtnFill(bgColor: Color, fgColor: Color) {
+    private fun animateBtnsFill(bgColor: Color, fgColor: Color) {
         val timeline = Timeline(
-            KeyFrame(Duration.seconds(0.5), KeyValue(toolBarViewModel.btnCurrentColorBgProperty(), bgColor)),
-            KeyFrame(Duration.seconds(0.5), KeyValue(toolBarViewModel.btnCurrentColorFgProperty(), fgColor)))
+            KeyFrame(Duration.seconds(0.5), KeyValue(toolBarViewModel.btnsColorBgProperty(), bgColor)),
+            KeyFrame(Duration.seconds(0.5), KeyValue(toolBarViewModel.btnsColorFgProperty(), fgColor)))
         timeline.play()
     }
 }

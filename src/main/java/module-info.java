@@ -15,6 +15,7 @@ module kg.musabaev.cluserizator {
     exports kg.musabaev.cluserizator;
     exports kg.musabaev.cluserizator.view;
     exports kg.musabaev.cluserizator.viewmodel;
+    exports kg.musabaev.cluserizator.domain;
     exports kg.musabaev.cluserizator.menu;
     exports kg.musabaev.cluserizator.saveload;
 
