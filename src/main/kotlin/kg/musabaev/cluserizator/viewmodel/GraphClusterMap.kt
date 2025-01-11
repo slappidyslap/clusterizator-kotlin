@@ -9,6 +9,7 @@ import java.io.ObjectOutput
 import javax.inject.Singleton
 
 @Singleton
+// Изменить тавтологию, очистить
 class GraphClusterMap : Externalizable /*: ObservableMapWrapper<String, ObservableList<SeoKeywordModel>>(HashMap<String, ObservableList<SeoKeywordModel>>())*/ {
     val map = FXCollections.observableHashMap<String, GraphClusterValue>()
 

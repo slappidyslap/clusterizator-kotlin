@@ -76,7 +76,10 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
                         webEngine.addEdge(parentClusterNodeId, clusterNodeId)
                     }
                 }
-                change.wasRemoved() -> { TODO() }
+                change.wasRemoved() -> {
+                    webEngine.deleteSelected()
+
+                }
             }
         })
     }
@@ -92,19 +95,23 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
 
     @JsFunction
     fun selectNode(id: String) {
-        graphViewModel.setSelectedGraphId(id)
+        graphViewModel.setSelectedClusterId(id)
     }
 
     @JsFunction
     fun deselectNode() {
-        graphViewModel.setSelectedGraphId("")
+        graphViewModel.setSelectedClusterId("")
     }
 
     private fun WebEngine.addNode(id: String) {
-        this.executeScriptSafely("GraphViewJs.addNode('$id')")
+        this.executeScriptSafely("GraphViewJs.addNode('$id')") // TODO почистить
     }
 
     private fun WebEngine.addEdge(from: String, to: String) {
         this.executeScriptSafely("GraphViewJs.addEdge('$from', '$to')")
+    }
+
+    private fun WebEngine.deleteSelected() {
+        this.executeScriptSafely("graph.deleteSelected()")
     }
 }

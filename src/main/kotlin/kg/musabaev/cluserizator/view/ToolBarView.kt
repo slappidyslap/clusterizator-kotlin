@@ -6,7 +6,10 @@ import javafx.animation.KeyValue
 import javafx.animation.Timeline
 import javafx.beans.binding.Bindings
 import javafx.fxml.Initializable
+import javafx.scene.control.Alert
+import javafx.scene.control.Alert.AlertType.WARNING
 import javafx.scene.control.Button
+import javafx.scene.control.Dialog
 import javafx.scene.control.TextField
 import javafx.scene.layout.HBox
 import javafx.scene.paint.Color
@@ -24,6 +27,7 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
 
     private val regexInput = TextField("regex")
     private val addNodeBtn = Button("Создать")
+    private val deleteNodeBtn = Button("Удалить")
 
     private lateinit var toolBarViewModel: ToolBarViewModel
     private lateinit var seoKeywordTableViewModel: SeoKeywordTableViewModel
@@ -44,37 +48,59 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
     }
 
     override fun initialize(p0: URL?, p1: ResourceBundle?) {
-        super.getChildren().addAll(regexInput, addNodeBtn)
+        super.getChildren().addAll(regexInput, deleteNodeBtn, addNodeBtn)
         initListeners()
     }
 
     private fun initListeners() {
         toolBarViewModel.btnCurrentColorBgProperty().addListener { _, _, newVal ->
-            if (newVal == null) addNodeBtn.removeStyle("-fx-background-color")
-            else addNodeBtn.setStyle("-fx-background-color", getRgbStringByColor(newVal))
+            if (newVal == null) {
+                addNodeBtn.removeStyle("-fx-background-color")
+                deleteNodeBtn.removeStyle("-fx-background-color")
+            }
+            else {
+                addNodeBtn.setStyle("-fx-background-color", getRgbStringByColor(newVal))
+                deleteNodeBtn.setStyle("-fx-background-color", getRgbStringByColor(newVal))
+            }
         }
         toolBarViewModel.btnCurrentColorFgProperty().addListener { _, _, newVal ->
-            if (newVal == null) addNodeBtn.removeStyle("-fx-text-fill")
-            else addNodeBtn.setStyle("-fx-text-fill", getRgbStringByColor(newVal))
+            if (newVal == null) {
+                addNodeBtn.removeStyle("-fx-text-fill")
+                deleteNodeBtn.removeStyle("-fx-text-fill")
+            }
+            else {
+                addNodeBtn.setStyle("-fx-text-fill", getRgbStringByColor(newVal))
+                deleteNodeBtn.setStyle("-fx-text-fill", getRgbStringByColor(newVal))
+            }
         }
 
         initAddNodeBtnListeners()
+        initDeleteNodeBtnListeners()
     }
 
     private fun initAddNodeBtnListeners() {
         // Есть нода не выбрана, то кнопка должна быть отключена
         addNodeBtn.disableProperty().bind(
-            Bindings.isEmpty(graphViewModel.selectedGraphIdProperty())
-        )
+            Bindings.isEmpty(graphViewModel.selectedClusterIdProperty()))
 
-        // При нажатии на кнопку, изменять содержимое таблицы
+        // При выборе ноды изменять цвет кнопки на более контрастный относительно фона
+        graphViewModel.selectedClusterIdProperty().addListener { _, _, newVal ->
+            val colors = getBgAndFgColorByString(newVal)
+
+//            animateAddNodeBtnFill(colors.first, colors.second)
+
+            toolBarViewModel.setBtnCurrentBgColor(colors.first)
+            toolBarViewModel.setBtnCurrentFgColor(colors.second)
+        }
+
+        // При нажатии на кнопку, добавить новую ноду и изменить таблицу
         addNodeBtn.setOnAction {
             val clusterId = regexInput.text
-            // Ищем все ключи в соответствии regex
+            // Ищем все ключевые слова в таблице в соответствии regex
             val matchedKeywords = seoKeywordTableViewModel
                 .keywords
                 .filter { it.getKeyword().contains(Regex(regexInput.text)) }
-            val parentClusterId = graphViewModel.getSelectedGraphId()
+            val parentClusterId = graphViewModel.getSelectedClusterId()
 
             // В глобальное хранилище добавляем новую ноду - кластеризуем ключи
             val newCluster = GraphClusterValue(parentClusterId, clusterId, matchedKeywords)
@@ -85,14 +111,42 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
             parentCluster.seoKeywords().removeAll(matchedKeywords)
             parentCluster.neighborClusters().add(newCluster)
         }
+    }
 
-        graphViewModel.selectedGraphIdProperty().addListener { _, _, newVal ->
+    private fun initDeleteNodeBtnListeners() {
+        deleteNodeBtn.disableProperty().bind(
+            Bindings.isEmpty(graphViewModel.selectedClusterIdProperty()))
+
+        graphViewModel.selectedClusterIdProperty().addListener { _, _, newVal ->
             val colors = getBgAndFgColorByString(newVal)
 
 //            animateAddNodeBtnFill(colors.first, colors.second)
 
             toolBarViewModel.setBtnCurrentBgColor(colors.first)
             toolBarViewModel.setBtnCurrentFgColor(colors.second)
+        }
+
+        // При нажатии на кнопку, удалить выбранную ноду изменить таблицу
+        deleteNodeBtn.setOnAction {
+            val selectedCluster =  graphClusterMap.map[graphViewModel.getSelectedClusterId()]!!
+            val parentCluster = graphClusterMap.map[selectedCluster.getParentClusterId()]
+
+            // TODO() скорее всего даже не будет возможности удалять ноды с соседями
+            if (parentCluster == null || selectedCluster.neighborClusters().isNotEmpty()) {
+                val dialog = Alert(WARNING, "Нельзя удалять кластеры у которого есть дочерние кластеры")
+                dialog.show()
+                return@setOnAction
+            }
+
+            // Берем все ключевые слова удаляемой ноды
+            val selectedSeoKeywords = seoKeywordTableViewModel.keywords
+
+            // Добавляем ключевые слова в список ключевых слов родителя удаляемой ноды
+            parentCluster.seoKeywords().addAll(selectedSeoKeywords)
+
+            // Удаляем из мапы и из списка соседей у родителя
+            graphClusterMap.map.remove(selectedCluster.getClusterId())
+            parentCluster.neighborClusters().remove(selectedCluster)
         }
     }
 

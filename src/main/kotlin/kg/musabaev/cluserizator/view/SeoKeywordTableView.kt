@@ -54,7 +54,7 @@ class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTa
     }
 
     private fun initListeners() {
-        graphViewModel.selectedGraphIdProperty().addListener { _, _, newVal ->
+        graphViewModel.selectedClusterIdProperty().addListener { _, _, newVal ->
             if (newVal == null || newVal.isEmpty()) {
                 keywordTableViewModel.keywords.clear()  // TODO может вместо clear есть другой способ
             } else {

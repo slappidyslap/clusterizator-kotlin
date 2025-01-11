@@ -1,16 +1,14 @@
 package kg.musabaev.cluserizator.viewmodel
 
 import de.saxsys.mvvmfx.ViewModel
-import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
-import javafx.beans.value.ObservableObjectValue
 import javax.inject.Singleton
 
 @Singleton
 class GraphViewModel : ViewModel {
-    private val selectedGraphIdProperty = SimpleStringProperty()
+    private val selectedClusterIdProperty = SimpleStringProperty()
 
-    fun getSelectedGraphId() = selectedGraphIdProperty.get()
-    fun setSelectedGraphId(graphId: String) = selectedGraphIdProperty.set(graphId)
-    fun selectedGraphIdProperty() = selectedGraphIdProperty
+    fun getSelectedClusterId() = selectedClusterIdProperty.get()
+    fun setSelectedClusterId(id: String) = selectedClusterIdProperty.set(id)
+    fun selectedClusterIdProperty() = selectedClusterIdProperty
 }
