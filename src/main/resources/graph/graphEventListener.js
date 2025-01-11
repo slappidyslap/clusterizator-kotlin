@@ -33,9 +33,9 @@ function stringToColorForDarkTheme(input) {
   const b = hash & 0x0000FF;
 
   // Применяем пастельный эффект для тёмной темы (увеличиваем яркость, снижаем насыщенность)
-  const pastelR = Math.floor((r + 128) / 4);
-  const pastelG = Math.floor((g + 128) / 4);
-  const pastelB = Math.floor((b + 128) / 4);
+  const pastelR = Math.floor((r + 128) / 6);
+  const pastelG = Math.floor((g + 128) / 6);
+  const pastelB = Math.floor((b + 128) / 6);
 
   return {
     value: `rgba(${pastelR}, ${pastelG}, ${pastelB}, 0.2)`,
@@ -58,16 +58,4 @@ graph.on('deselectNode', e => {
   document.getElementById("graph").style.backgroundColor = ''
   GraphViewJs.selectedGraphId = ''
   GraphView.deselectNode()
-})
-
-network.on('dragEnd', function(){
-  graph.unselectAll();
-});
-
-network.on('dragEnd', function(){
-  graph.unselectAll();
-});
-
-graph.on('click', e => {
-    if (e.nodes) {}
 })
