@@ -1,18 +1,11 @@
 package kg.musabaev.cluserizator.viewmodel
 
-import de.saxsys.mvvmfx.ViewModel
-import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
-import javafx.collections.FXCollections
 import javafx.collections.FXCollections.observableArrayList
-import java.io.Externalizable
-import java.io.ObjectInput
-import java.io.ObjectOutput
-import javax.inject.Singleton
 
-class SeoKeywordModel() : ViewModel {
+class SeoKeyword() {
 
-    constructor(keyword: String, otherMetas: Array<String>) : this() {
+    constructor(keyword: String, otherMetas: List<String>) : this() {
         keywordProperty.set(keyword)
         otherMetasProperty.addAll(otherMetas)
     }
@@ -33,7 +26,7 @@ class SeoKeywordModel() : ViewModel {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
-        other as SeoKeywordModel
+        other as SeoKeyword
         return keywordProperty.get() == other.keywordProperty.get()
     }
 

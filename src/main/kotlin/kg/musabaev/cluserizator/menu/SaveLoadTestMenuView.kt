@@ -1,8 +1,9 @@
 package kg.musabaev.cluserizator.menu
 
 import com.alibaba.fastjson2.JSON
-import com.alibaba.fastjson2.JSONWriter
-import com.alibaba.fastjson2.JSONWriter.Feature
+import com.alibaba.fastjson2.JSONReader.Feature.AllowUnQuotedFieldNames
+import com.alibaba.fastjson2.JSONWriter.Feature.PrettyFormat
+import com.alibaba.fastjson2.JSONWriter.Feature.UnquoteFieldName
 import javafx.collections.FXCollections.observableArrayList
 import javafx.fxml.Initializable
 import javafx.scene.control.Menu
@@ -10,11 +11,11 @@ import javafx.scene.control.MenuItem
 import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
 import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
 import kg.musabaev.cluserizator.viewmodel.GraphClusterValue
-import kg.musabaev.cluserizator.viewmodel.SeoKeywordModel
+import kg.musabaev.cluserizator.viewmodel.SeoKeyword
+import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.io.ObjectInputStream
 import java.net.URL
 import java.util.*
 import javax.inject.Inject
@@ -34,13 +35,13 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
         super.getMenus().add(Menu("Для разработчиков").apply {
             items.addAll(
                 MenuItem("Пример графа").apply { setOnAction {
-                    val a = observableArrayList<SeoKeywordModel>()
+                    val a = observableArrayList<SeoKeyword>()
                     TestCsvFileHandler().getLinesCsv().forEach { line ->
-                        val values = line.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                        val otherMetas = values.copyOfRange(1, values.lastIndex - 1)
+                        val values = line.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toList()
+                        val otherMetas = values.subList(1, values.lastIndex - 1)
                         val keyword = values[0]
 
-                        val seoKeyword = SeoKeywordModel(keyword, otherMetas)
+                        val seoKeyword = SeoKeyword(keyword, otherMetas)
                         a.add(seoKeyword)
                     }
                     graphClusterMap.map["root"] = GraphClusterValue(
@@ -49,15 +50,18 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
                 }},
                 MenuItem("Удалить все кластеры").apply { setOnAction { TODO() } }
             )
-        }) // мб потом перенести в initialize
+        }) // TODO мб потом перенести в initialize
     }
 
     override fun loadFile() {
         menuViewModel.setIsLoadingFromSave(true)
-        ObjectInputStream(FileInputStream("test.seoclztr")).use { input ->
-            val graphClusterMapFromFile = input.readObject() as GraphClusterMap
-            graphClusterMap.map.putAll(graphClusterMapFromFile.map)
-//            graphClusterMapFromFile = null ??? TODO() в памяти все еще хранится объект graphClusterMapFromFile и graphClusterMap.map
+        BufferedInputStream(FileInputStream("test.seoclztr")).use { input ->
+            val root = JSON.parseObject<GraphClusterValue>(
+                input,
+                GraphClusterValue::class.java,
+                AllowUnQuotedFieldNames)
+            putClustersRecursively(root)
+            graphClusterMap.map["root"] = root
         }
         menuViewModel.setIsLoadingFromSave(false)
     }
@@ -68,7 +72,16 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
             JSON.writeTo(
                 output,
                 graphClusterMap.map["root"],
-                Feature.PrettyFormat, Feature.UnquoteFieldName)
+                UnquoteFieldName
+            )
+        }
+    }
+
+    private fun putClustersRecursively(cluster: GraphClusterValue) {
+        if (cluster.neighborClusters().isEmpty()) return
+        for (neighbor in cluster.neighborClusters()) {
+            putClustersRecursively(neighbor)
+            graphClusterMap.map[neighbor.getClusterId()] = neighbor
         }
     }
 

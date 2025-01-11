@@ -10,7 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.layout.BorderPane
 import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
 import kg.musabaev.cluserizator.viewmodel.GraphViewModel
-import kg.musabaev.cluserizator.viewmodel.SeoKeywordModel
+import kg.musabaev.cluserizator.viewmodel.SeoKeyword
 import kg.musabaev.cluserizator.viewmodel.SeoKeywordTableViewModel
 import java.net.URL
 import java.util.*
@@ -20,7 +20,7 @@ import javax.inject.Singleton
 @Singleton
 class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTableViewModel> {
 
-    private val table: TableView<SeoKeywordModel> = TableView()
+    private val table: TableView<SeoKeyword> = TableView()
 
     @InjectViewModel
     private lateinit var keywordTableViewModel: SeoKeywordTableViewModel
@@ -40,11 +40,11 @@ class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTa
     }
 
     private fun initTableView() {
-        val idColumn = TableColumn<SeoKeywordModel, String>("ID").apply {
+        val idColumn = TableColumn<SeoKeyword, String>("ID").apply {
 //            cellValueFactory = PropertyValueFactory("id")
         }
 
-        val keyColumn = TableColumn<SeoKeywordModel, String>("Ключевое слово").apply {
+        val keyColumn = TableColumn<SeoKeyword, String>("Ключевое слово").apply {
             cellValueFactory = PropertyValueFactory("keyword")
         }
 

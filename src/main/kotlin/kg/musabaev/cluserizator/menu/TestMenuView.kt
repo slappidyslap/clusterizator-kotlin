@@ -3,8 +3,7 @@ package kg.musabaev.cluserizator.menu
 import javafx.collections.FXCollections.observableArrayList
 import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
 import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
-import kg.musabaev.cluserizator.viewmodel.GraphClusterValue
-import kg.musabaev.cluserizator.viewmodel.SeoKeywordModel
+import kg.musabaev.cluserizator.viewmodel.SeoKeyword
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,13 +18,13 @@ private class TestMenuView() : MenuView() {
     }
 
     override fun loadFile() {
-        val a = observableArrayList<SeoKeywordModel>()
+        val a = observableArrayList<SeoKeyword>()
         TestCsvFileHandler().getLinesCsv().forEach { line ->
-            val values = line.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            val otherMetas = values.copyOfRange(1, values.lastIndex - 1)
+            val values = line.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toList()
+            val otherMetas = values.subList(1, values.lastIndex - 1)
             val keyword = values[0]
 
-            val seoKeyword = SeoKeywordModel(keyword, otherMetas)
+            val seoKeyword = SeoKeyword(keyword, otherMetas)
             a.add(seoKeyword)
         }
         /*val node22 = GraphClusterValue(

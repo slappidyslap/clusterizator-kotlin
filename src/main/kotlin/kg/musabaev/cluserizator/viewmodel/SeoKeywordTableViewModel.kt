@@ -7,5 +7,5 @@ import javax.inject.Singleton
 
 @Singleton
 class SeoKeywordTableViewModel : ViewModel {
-    val keywords: ObservableList<SeoKeywordModel> = FXCollections.observableArrayList()
+    val keywords: ObservableList<SeoKeyword> = FXCollections.observableArrayList()
 }
