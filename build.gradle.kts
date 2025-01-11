@@ -45,16 +45,16 @@ javafx {
   modules = listOf("javafx.controls", "javafx.fxml", "javafx.web", "javafx.swing")
 }
 
+val mvvmFxVer by extra("1.9.0-SNAPSHOT")
+
 dependencies {
   implementation(files("lib/scenicview.jar"))
+
+  implementation("com.alibaba.fastjson2:fastjson2:2.0.53")
+
 //  implementation("com.vladsch.javafx-webview-debugger:javafx-webview-debugger:0.8.0")
-  testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
-  implementation("de.saxsys:mvvmfx:1.9.0-SNAPSHOT")
-  implementation("de.saxsys:mvvmfx-easydi:1.9.0-SNAPSHOT")
-
-  implementation("com.opencsv:opencsv:5.9")
-
+  implementation("de.saxsys:mvvmfx:$mvvmFxVer")
+  implementation("de.saxsys:mvvmfx-easydi:$mvvmFxVer")
 }
 
 tasks.test {

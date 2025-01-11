@@ -1,5 +1,8 @@
 package kg.musabaev.cluserizator.menu
 
+import com.alibaba.fastjson2.JSON
+import com.alibaba.fastjson2.JSONWriter
+import com.alibaba.fastjson2.JSONWriter.Feature
 import javafx.collections.FXCollections.observableArrayList
 import javafx.fxml.Initializable
 import javafx.scene.control.Menu
@@ -8,10 +11,10 @@ import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
 import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
 import kg.musabaev.cluserizator.viewmodel.GraphClusterValue
 import kg.musabaev.cluserizator.viewmodel.SeoKeywordModel
+import java.io.BufferedOutputStream
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.ObjectInputStream
-import java.io.ObjectOutputStream
 import java.net.URL
 import java.util.*
 import javax.inject.Inject
@@ -60,8 +63,12 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
     }
 
     override fun saveFile() {
-        ObjectOutputStream(FileOutputStream("test.seoclztr")).use { output ->
-            output.writeObject(graphClusterMap)
+        // TODO() тут надо изучить какой размера буфера можно выделить
+        BufferedOutputStream(FileOutputStream("test.seoclztr"), 128).use { output ->
+            JSON.writeTo(
+                output,
+                graphClusterMap.map["root"],
+                Feature.PrettyFormat, Feature.UnquoteFieldName)
         }
     }
 

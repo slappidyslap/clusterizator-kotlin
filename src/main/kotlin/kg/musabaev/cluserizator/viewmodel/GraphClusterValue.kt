@@ -1,12 +1,10 @@
 package kg.musabaev.cluserizator.viewmodel
 
+import com.alibaba.fastjson2.annotation.JSONField
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections.observableArrayList
-import java.io.Externalizable
-import java.io.ObjectInput
-import java.io.ObjectOutput
 
-class GraphClusterValue(): Externalizable {
+class GraphClusterValue() {
 
     constructor(
         parentClusterId: String,
@@ -34,26 +32,29 @@ class GraphClusterValue(): Externalizable {
     private val seoKeywordsProperty = observableArrayList<SeoKeywordModel>()
     private val neighborClustersProperty = observableArrayList<GraphClusterValue>()
 
+    @JSONField(ordinal = 1)
     fun getParentClusterId() = parentClusterIdProperty.get() ?: ""
     fun setParentClusterId(id: String) = parentClusterIdProperty.set(id)
     fun parentClusterIdProperty() = parentClusterIdProperty
 
+    @JSONField(ordinal = 2)
     fun getClusterId() = clusterIdProperty.get()
     fun setClusterId(id: String) = clusterIdProperty.set(id)
     fun clusterIdProperty() = clusterIdProperty
 
-    fun neighborClusters() = neighborClustersProperty
+    @JSONField(ordinal = 3)
+    fun getSeoKeywordsAsList() = seoKeywordsProperty.toList()
     fun seoKeywords() = seoKeywordsProperty
 
-    override fun writeExternal(out: ObjectOutput) {
-        out.writeUTF(clusterIdProperty.get())
-        out.writeObject(seoKeywords().toList())
-        out.writeObject(neighborClusters().toList())
-    }
+    @JSONField(ordinal = 4)
+    fun getNeighborClustersAsList() = neighborClustersProperty.toList()
+    fun neighborClusters() = neighborClustersProperty
 
-    override fun readExternal(input: ObjectInput) {
-        setClusterId(input.readUTF())
-        seoKeywords().addAll(observableArrayList(input.readObject() as List<SeoKeywordModel>))
-        neighborClusters().addAll(observableArrayList(input.readObject() as List<GraphClusterValue>))
+    override fun toString(): String {
+        return "GraphClusterValue(" +
+                "\n\tparentClusterIdProperty=${parentClusterIdProperty.get()}," +
+                "\n\tclusterIdProperty=${clusterIdProperty.get()}," +
+                "\n\tseoKeywordsCount=${seoKeywordsProperty.size}," +
+                "\n\tneighborClustersProperty=$neighborClustersProperty)"
     }
 }

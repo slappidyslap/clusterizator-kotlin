@@ -10,7 +10,7 @@ import java.io.ObjectInput
 import java.io.ObjectOutput
 import javax.inject.Singleton
 
-class SeoKeywordModel() : ViewModel, Externalizable {
+class SeoKeywordModel() : ViewModel {
 
     constructor(keyword: String, otherMetas: Array<String>) : this() {
         keywordProperty.set(keyword)
@@ -20,24 +20,14 @@ class SeoKeywordModel() : ViewModel, Externalizable {
     private val otherMetasProperty = observableArrayList<String>()
 
     fun getKeyword() = keywordProperty.get()
-
     fun setKeyword(keyword: String) = keywordProperty.set(keyword)
-
     fun keywordProperty() = keywordProperty
+
+    fun getOtherMetas() = otherMetasProperty
     fun otherMetas() = otherMetasProperty
 
     override fun toString(): String {
         return "SeoKeywordModel(keyword=${keywordProperty.get()})"
-    }
-
-    override fun writeExternal(out: ObjectOutput) {
-        out.writeUTF(getKeyword())
-        out.writeObject(otherMetasProperty.toList())
-    }
-
-    override fun readExternal(input: ObjectInput) {
-        setKeyword(input.readUTF())
-        otherMetas().addAll(observableArrayList(input.readObject() as List<String>))
     }
 
     override fun equals(other: Any?): Boolean {
