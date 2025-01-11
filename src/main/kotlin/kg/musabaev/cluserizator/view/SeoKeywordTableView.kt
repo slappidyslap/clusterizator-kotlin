@@ -8,7 +8,7 @@ import javafx.scene.control.TableColumn
 import javafx.scene.control.TableView
 import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.layout.BorderPane
-import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
+import kg.musabaev.cluserizator.viewmodel.GraphClusters
 import kg.musabaev.cluserizator.viewmodel.GraphViewModel
 import kg.musabaev.cluserizator.viewmodel.SeoKeyword
 import kg.musabaev.cluserizator.viewmodel.SeoKeywordTableViewModel
@@ -25,13 +25,13 @@ class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTa
     @InjectViewModel
     private lateinit var keywordTableViewModel: SeoKeywordTableViewModel
     private lateinit var graphViewModel: GraphViewModel
-    private lateinit var graphClusterMap: GraphClusterMap
+    private lateinit var graphClusters: GraphClusters
 
     @Inject
-    constructor(keywordTableViewModel: SeoKeywordTableViewModel, graphViewModel: GraphViewModel, graphClusterMap: GraphClusterMap) : this() {
+    constructor(keywordTableViewModel: SeoKeywordTableViewModel, graphViewModel: GraphViewModel, graphClusters: GraphClusters) : this() {
         this.keywordTableViewModel = keywordTableViewModel
         this.graphViewModel = graphViewModel
-        this.graphClusterMap = graphClusterMap
+        this.graphClusters = graphClusters
     }
 
     override fun initialize(p0: URL?, p1: ResourceBundle?) {
@@ -58,7 +58,7 @@ class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTa
             if (newVal == null || newVal.isEmpty()) {
                 keywordTableViewModel.keywords.clear()  // TODO может вместо clear есть другой способ
             } else {
-                graphClusterMap.map[newVal].let {
+                graphClusters[newVal].let {
                     keywordTableViewModel.keywords.setAll(it!!.seoKeywords()) // TODO может вместо setAll есть другой способ
                 }
             }

@@ -2,14 +2,13 @@ package kg.musabaev.cluserizator.menu
 
 import com.alibaba.fastjson2.JSON
 import com.alibaba.fastjson2.JSONReader.Feature.AllowUnQuotedFieldNames
-import com.alibaba.fastjson2.JSONWriter.Feature.PrettyFormat
 import com.alibaba.fastjson2.JSONWriter.Feature.UnquoteFieldName
 import javafx.collections.FXCollections.observableArrayList
 import javafx.fxml.Initializable
 import javafx.scene.control.Menu
 import javafx.scene.control.MenuItem
 import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
-import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
+import kg.musabaev.cluserizator.viewmodel.GraphClusters
 import kg.musabaev.cluserizator.viewmodel.GraphClusterValue
 import kg.musabaev.cluserizator.viewmodel.SeoKeyword
 import java.io.BufferedInputStream
@@ -24,12 +23,12 @@ import javax.inject.Singleton
 @Singleton
 class SaveLoadTestMenuView() : MenuView(), Initializable {
 
-    private lateinit var graphClusterMap: GraphClusterMap
+    private lateinit var graphClusters: GraphClusters
     private lateinit var menuViewModel: MenuViewModel
 
     @Inject
-    constructor(graphClusterMap: GraphClusterMap, menuViewModel: MenuViewModel) : this() {
-        this.graphClusterMap = graphClusterMap
+    constructor(graphClusters: GraphClusters, menuViewModel: MenuViewModel) : this() {
+        this.graphClusters = graphClusters
         this.menuViewModel = menuViewModel
 
         super.getMenus().add(Menu("Для разработчиков").apply {
@@ -44,7 +43,7 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
                         val seoKeyword = SeoKeyword(keyword, otherMetas)
                         a.add(seoKeyword)
                     }
-                    graphClusterMap.map["root"] = GraphClusterValue(
+                    graphClusters["root"] = GraphClusterValue(
                         clusterId = "root",
                         seoKeywords = observableArrayList(a))
                 }},
@@ -61,7 +60,7 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
                 GraphClusterValue::class.java,
                 AllowUnQuotedFieldNames)
             putClustersRecursively(root)
-            graphClusterMap.map["root"] = root
+            graphClusters["root"] = root
         }
         menuViewModel.setIsLoadingFromSave(false)
     }
@@ -71,7 +70,7 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
         BufferedOutputStream(FileOutputStream("test.seoclztr"), 128).use { output ->
             JSON.writeTo(
                 output,
-                graphClusterMap.map["root"],
+                graphClusters["root"],
                 UnquoteFieldName
             )
         }
@@ -81,7 +80,7 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
         if (cluster.neighborClusters().isEmpty()) return
         for (neighbor in cluster.neighborClusters()) {
             putClustersRecursively(neighbor)
-            graphClusterMap.map[neighbor.getClusterId()] = neighbor
+            graphClusters[neighbor.getClusterId()] = neighbor
         }
     }
 

@@ -12,7 +12,7 @@ import kg.musabaev.cluserizator.menu.MenuViewModel
 import kg.musabaev.cluserizator.util.JsFunction
 import kg.musabaev.cluserizator.util.Utils
 import kg.musabaev.cluserizator.util.executeScriptSafely
-import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
+import kg.musabaev.cluserizator.viewmodel.GraphClusters
 import kg.musabaev.cluserizator.viewmodel.GraphClusterValue
 import kg.musabaev.cluserizator.viewmodel.GraphViewModel
 import kg.musabaev.cluserizator.viewmodel.SeoKeywordTableViewModel
@@ -31,14 +31,14 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
     @InjectViewModel
     private lateinit var graphViewModel: GraphViewModel
     private lateinit var keywordTableViewModel: SeoKeywordTableViewModel
-    private lateinit var graphClusterMap: GraphClusterMap
+    private lateinit var graphClusters: GraphClusters
     private lateinit var menuViewModel: MenuViewModel
 
     @Inject
-    constructor(graphViewModel: GraphViewModel, keywordTableViewModel: SeoKeywordTableViewModel, graphClusterMap: GraphClusterMap, menuViewModel: MenuViewModel) : this() {
+    constructor(graphViewModel: GraphViewModel, keywordTableViewModel: SeoKeywordTableViewModel, graphClusters: GraphClusters, menuViewModel: MenuViewModel) : this() {
         this.graphViewModel = graphViewModel
         this.keywordTableViewModel = keywordTableViewModel
-        this.graphClusterMap = graphClusterMap
+        this.graphClusters = graphClusters
         this.menuViewModel = menuViewModel
     }
 
@@ -57,7 +57,7 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
     }
 
     private fun initListeners() {
-        graphClusterMap.map.addListener(MapChangeListener { change ->
+        graphClusters.map.addListener(MapChangeListener { change ->
             when {
                 change.wasAdded() -> {
                     val clusterNodeId: String = change.key

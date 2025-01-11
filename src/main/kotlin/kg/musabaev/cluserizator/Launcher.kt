@@ -9,7 +9,7 @@ import kg.musabaev.cluserizator.menu.MenuView
 import kg.musabaev.cluserizator.menu.MenuViewModel
 import kg.musabaev.cluserizator.menu.SaveLoadTestMenuView
 import kg.musabaev.cluserizator.view.*
-import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
+import kg.musabaev.cluserizator.viewmodel.GraphClusters
 
 class Launcher : MvvmfxEasyDIApplication() {
     @Throws(Exception::class)
@@ -42,7 +42,7 @@ class Launcher : MvvmfxEasyDIApplication() {
     override fun initEasyDi(context: EasyDI) {
         context.bindProvider(MenuView::class.java) {
             SaveLoadTestMenuView(
-                context.getInstance(GraphClusterMap::class.java),
+                context.getInstance(GraphClusters::class.java),
                 context.getInstance(MenuViewModel::class.java))
         }
     }

@@ -9,7 +9,6 @@ import javafx.fxml.Initializable
 import javafx.scene.control.Alert
 import javafx.scene.control.Alert.AlertType.WARNING
 import javafx.scene.control.Button
-import javafx.scene.control.Dialog
 import javafx.scene.control.TextField
 import javafx.scene.layout.HBox
 import javafx.scene.paint.Color
@@ -31,19 +30,19 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
 
     private lateinit var toolBarViewModel: ToolBarViewModel
     private lateinit var seoKeywordTableViewModel: SeoKeywordTableViewModel
-    private lateinit var graphClusterMap: GraphClusterMap
+    private lateinit var graphClusters: GraphClusters
     private lateinit var graphViewModel: GraphViewModel
 
     @Inject
     constructor(
         toolBarViewModel: ToolBarViewModel,
         seoKeywordTableViewModel: SeoKeywordTableViewModel,
-        graphClusterMap: GraphClusterMap,
+        graphClusters: GraphClusters,
         graphViewModel: GraphViewModel
     ) : this() {
         this.toolBarViewModel = toolBarViewModel
         this.seoKeywordTableViewModel = seoKeywordTableViewModel
-        this.graphClusterMap = graphClusterMap
+        this.graphClusters = graphClusters
         this.graphViewModel = graphViewModel
     }
 
@@ -104,10 +103,10 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
 
             // В глобальное хранилище добавляем новую ноду - кластеризуем ключи
             val newCluster = GraphClusterValue(parentClusterId, clusterId, matchedKeywords)
-            graphClusterMap.map[clusterId] = newCluster
+            graphClusters[clusterId] = newCluster
 
             // Раз кластеризовали ключи, удаляем из старого кластера и добавляем дочернюю ноду в список из родительской ноды
-            val parentCluster = graphClusterMap.map[parentClusterId]!!
+            val parentCluster = graphClusters[parentClusterId]!!
             parentCluster.seoKeywords().removeAll(matchedKeywords)
             parentCluster.neighborClusters().add(newCluster)
         }
@@ -128,8 +127,8 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
 
         // При нажатии на кнопку, удалить выбранную ноду изменить таблицу
         deleteNodeBtn.setOnAction {
-            val selectedCluster =  graphClusterMap.map[graphViewModel.getSelectedClusterId()]!!
-            val parentCluster = graphClusterMap.map[selectedCluster.getParentClusterId()]
+            val selectedCluster =  graphClusters[graphViewModel.getSelectedClusterId()]!!
+            val parentCluster = graphClusters[selectedCluster.getParentClusterId()]
 
             // TODO() скорее всего даже не будет возможности удалять ноды с соседями
             if (parentCluster == null || selectedCluster.neighborClusters().isNotEmpty()) {
@@ -145,7 +144,7 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
             parentCluster.seoKeywords().addAll(selectedSeoKeywords)
 
             // Удаляем из мапы и из списка соседей у родителя
-            graphClusterMap.map.remove(selectedCluster.getClusterId())
+            graphClusters.map.remove(selectedCluster.getClusterId())
             parentCluster.neighborClusters().remove(selectedCluster)
         }
     }

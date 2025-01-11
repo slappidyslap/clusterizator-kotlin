@@ -2,7 +2,7 @@ package kg.musabaev.cluserizator.menu
 
 import javafx.collections.FXCollections.observableArrayList
 import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
-import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
+import kg.musabaev.cluserizator.viewmodel.GraphClusters
 import kg.musabaev.cluserizator.viewmodel.SeoKeyword
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -10,11 +10,11 @@ import javax.inject.Singleton
 @Singleton
 private class TestMenuView() : MenuView() {
 
-    private lateinit var graphClusterMap: GraphClusterMap
+    private lateinit var graphClusters: GraphClusters
 
     @Inject
-    constructor(graphClusterMap: GraphClusterMap) : this() {
-        this.graphClusterMap = graphClusterMap
+    constructor(graphClusters: GraphClusters) : this() {
+        this.graphClusters = graphClusters
     }
 
     override fun loadFile() {
