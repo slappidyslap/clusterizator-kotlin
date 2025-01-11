@@ -9,7 +9,7 @@ import kg.musabaev.cluserizator.menu.MenuView
 import kg.musabaev.cluserizator.menu.MenuViewModel
 import kg.musabaev.cluserizator.menu.SaveLoadTestMenuView
 import kg.musabaev.cluserizator.view.*
-import kg.musabaev.cluserizator.viewmodel.GraphClusters
+import kg.musabaev.cluserizator.domain.GraphClusters
 
 class Launcher : MvvmfxEasyDIApplication() {
     @Throws(Exception::class)

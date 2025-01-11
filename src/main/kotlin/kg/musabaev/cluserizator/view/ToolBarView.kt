@@ -13,6 +13,8 @@ import javafx.scene.control.TextField
 import javafx.scene.layout.HBox
 import javafx.scene.paint.Color
 import javafx.util.Duration
+import kg.musabaev.cluserizator.domain.GraphClusterItem
+import kg.musabaev.cluserizator.domain.GraphClusters
 import kg.musabaev.cluserizator.util.removeStyle
 import kg.musabaev.cluserizator.util.setStyle
 import kg.musabaev.cluserizator.viewmodel.*
@@ -102,13 +104,13 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
             val parentClusterId = graphViewModel.getSelectedClusterId()
 
             // В глобальное хранилище добавляем новую ноду - кластеризуем ключи
-            val newCluster = GraphClusterValue(parentClusterId, clusterId, matchedKeywords)
+            val newCluster = GraphClusterItem(parentClusterId, clusterId, matchedKeywords)
             graphClusters[clusterId] = newCluster
 
             // Раз кластеризовали ключи, удаляем из старого кластера и добавляем дочернюю ноду в список из родительской ноды
             val parentCluster = graphClusters[parentClusterId]!!
             parentCluster.seoKeywords().removeAll(matchedKeywords)
-            parentCluster.neighborClusters().add(newCluster)
+            parentCluster.neighbors().add(newCluster)
         }
     }
 
@@ -128,10 +130,10 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
         // При нажатии на кнопку, удалить выбранную ноду изменить таблицу
         deleteNodeBtn.setOnAction {
             val selectedCluster =  graphClusters[graphViewModel.getSelectedClusterId()]!!
-            val parentCluster = graphClusters[selectedCluster.getParentClusterId()]
+            val parentCluster = graphClusters[selectedCluster.getParentId()]
 
             // TODO() скорее всего даже не будет возможности удалять ноды с соседями
-            if (parentCluster == null || selectedCluster.neighborClusters().isNotEmpty()) {
+            if (parentCluster == null || selectedCluster.neighbors().isNotEmpty()) {
                 val dialog = Alert(WARNING, "Нельзя удалять кластеры у которого есть дочерние кластеры")
                 dialog.show()
                 return@setOnAction
@@ -144,8 +146,8 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
             parentCluster.seoKeywords().addAll(selectedSeoKeywords)
 
             // Удаляем из мапы и из списка соседей у родителя
-            graphClusters.map.remove(selectedCluster.getClusterId())
-            parentCluster.neighborClusters().remove(selectedCluster)
+            graphClusters.map.remove(selectedCluster.getId())
+            parentCluster.neighbors().remove(selectedCluster)
         }
     }
 

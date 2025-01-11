@@ -8,9 +8,9 @@ import javafx.fxml.Initializable
 import javafx.scene.control.Menu
 import javafx.scene.control.MenuItem
 import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
-import kg.musabaev.cluserizator.viewmodel.GraphClusters
-import kg.musabaev.cluserizator.viewmodel.GraphClusterValue
-import kg.musabaev.cluserizator.viewmodel.SeoKeyword
+import kg.musabaev.cluserizator.domain.GraphClusters
+import kg.musabaev.cluserizator.domain.GraphClusterItem
+import kg.musabaev.cluserizator.domain.SeoKeyword
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.FileInputStream
@@ -43,8 +43,8 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
                         val seoKeyword = SeoKeyword(keyword, otherMetas)
                         a.add(seoKeyword)
                     }
-                    graphClusters["root"] = GraphClusterValue(
-                        clusterId = "root",
+                    graphClusters["root"] = GraphClusterItem(
+                        id = "root",
                         seoKeywords = observableArrayList(a))
                 }},
                 MenuItem("Удалить все кластеры").apply { setOnAction { TODO() } }
@@ -55,9 +55,9 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
     override fun loadFile() {
         menuViewModel.setIsLoadingFromSave(true)
         BufferedInputStream(FileInputStream("test.seoclztr")).use { input ->
-            val root = JSON.parseObject<GraphClusterValue>(
+            val root = JSON.parseObject<GraphClusterItem>(
                 input,
-                GraphClusterValue::class.java,
+                GraphClusterItem::class.java,
                 AllowUnQuotedFieldNames)
             putClustersRecursively(root)
             graphClusters["root"] = root
@@ -76,11 +76,11 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
         }
     }
 
-    private fun putClustersRecursively(cluster: GraphClusterValue) {
-        if (cluster.neighborClusters().isEmpty()) return
-        for (neighbor in cluster.neighborClusters()) {
+    private fun putClustersRecursively(cluster: GraphClusterItem) {
+        if (cluster.neighbors().isEmpty()) return
+        for (neighbor in cluster.neighbors()) {
             putClustersRecursively(neighbor)
-            graphClusters[neighbor.getClusterId()] = neighbor
+            graphClusters[neighbor.getId()] = neighbor
         }
     }
 

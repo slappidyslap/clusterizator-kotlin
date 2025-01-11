@@ -12,8 +12,8 @@ import kg.musabaev.cluserizator.menu.MenuViewModel
 import kg.musabaev.cluserizator.util.JsFunction
 import kg.musabaev.cluserizator.util.Utils
 import kg.musabaev.cluserizator.util.executeScriptSafely
-import kg.musabaev.cluserizator.viewmodel.GraphClusters
-import kg.musabaev.cluserizator.viewmodel.GraphClusterValue
+import kg.musabaev.cluserizator.domain.GraphClusters
+import kg.musabaev.cluserizator.domain.GraphClusterItem
 import kg.musabaev.cluserizator.viewmodel.GraphViewModel
 import kg.musabaev.cluserizator.viewmodel.SeoKeywordTableViewModel
 import netscape.javascript.JSObject
@@ -61,8 +61,8 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
             when {
                 change.wasAdded() -> {
                     val clusterNodeId: String = change.key
-                    val clusterNode: GraphClusterValue = change.valueAdded
-                    val parentClusterNodeId: String = clusterNode.getParentClusterId()
+                    val clusterNode: GraphClusterItem = change.valueAdded
+                    val parentClusterNodeId: String = clusterNode.getParentId()
 
                     // Если мапа заграужется из сейва
                     if (menuViewModel.getIsLoadingFromSave()) {
@@ -84,12 +84,12 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
         })
     }
 
-    private fun addNodesRecursively(cluster: GraphClusterValue) {
-        if (cluster.neighborClusters().isEmpty()) return
-        for (neighbor in cluster.neighborClusters()) {
+    private fun addNodesRecursively(cluster: GraphClusterItem) {
+        if (cluster.neighbors().isEmpty()) return
+        for (neighbor in cluster.neighbors()) {
             addNodesRecursively(neighbor)
-            webEngine.addNode(neighbor.getClusterId())
-            webEngine.addEdge(cluster.getClusterId(), neighbor.getClusterId())
+            webEngine.addNode(neighbor.getId())
+            webEngine.addEdge(cluster.getId(), neighbor.getId())
         }
     }
 

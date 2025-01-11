@@ -1,4 +1,4 @@
-package kg.musabaev.cluserizator.viewmodel
+package kg.musabaev.cluserizator.domain
 
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections.observableArrayList
@@ -9,6 +9,7 @@ class SeoKeyword() {
         keywordProperty.set(keyword)
         otherMetasProperty.addAll(otherMetas)
     }
+
     private val keywordProperty = SimpleStringProperty()
     private val otherMetasProperty = observableArrayList<String>()
 

@@ -2,8 +2,8 @@ package kg.musabaev.cluserizator.menu
 
 import javafx.collections.FXCollections.observableArrayList
 import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
-import kg.musabaev.cluserizator.viewmodel.GraphClusters
-import kg.musabaev.cluserizator.viewmodel.SeoKeyword
+import kg.musabaev.cluserizator.domain.GraphClusters
+import kg.musabaev.cluserizator.domain.SeoKeyword
 import javax.inject.Inject
 import javax.inject.Singleton
 
