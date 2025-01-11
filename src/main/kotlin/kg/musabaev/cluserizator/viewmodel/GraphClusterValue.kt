@@ -10,21 +10,21 @@ class GraphClusterValue(): Externalizable {
 
     constructor(
         parentClusterId: String,
-        clusterId: String,
+        clusterId: String, // TODO убрать тавтологию
         seoKeywords: List<SeoKeywordModel>,
-        neighborClusterIds: List<String>
+        neighborClusters: List<GraphClusterValue>
     ) : this() {
         parentClusterIdProperty.set(parentClusterId)
         clusterIdProperty.set(clusterId)
         seoKeywordsProperty.addAll(seoKeywords)
-        neighborClusterIdsProperty.addAll(neighborClusterIds)
+        neighborClustersProperty.addAll(neighborClusters)
     }
 
     constructor(parentClusterId: String, clusterId: String, seoKeywords: List<SeoKeywordModel>)
             : this(parentClusterId, clusterId, seoKeywords, mutableListOf())
 
-    constructor(clusterId: String, seoKeywords: List<SeoKeywordModel>, neighborClusterIds: List<String>)
-            : this("", clusterId, seoKeywords, neighborClusterIds)
+    constructor(clusterId: String, seoKeywords: List<SeoKeywordModel>, neighborCluster: List<GraphClusterValue>)
+            : this("", clusterId, seoKeywords, neighborCluster)
 
     constructor(clusterId: String, seoKeywords: List<SeoKeywordModel>)
             : this("", clusterId, seoKeywords, mutableListOf())
@@ -32,9 +32,9 @@ class GraphClusterValue(): Externalizable {
     private val parentClusterIdProperty = SimpleStringProperty()
     private val clusterIdProperty = SimpleStringProperty()
     private val seoKeywordsProperty = observableArrayList<SeoKeywordModel>()
-    private val neighborClusterIdsProperty = observableArrayList<String>()
+    private val neighborClustersProperty = observableArrayList<GraphClusterValue>()
 
-    fun getParentClusterId() = parentClusterIdProperty.get()
+    fun getParentClusterId() = parentClusterIdProperty.get() ?: ""
     fun setParentClusterId(id: String) = parentClusterIdProperty.set(id)
     fun parentClusterIdProperty() = parentClusterIdProperty
 
@@ -42,18 +42,18 @@ class GraphClusterValue(): Externalizable {
     fun setClusterId(id: String) = clusterIdProperty.set(id)
     fun clusterIdProperty() = clusterIdProperty
 
-    fun neighborClusterIds() = neighborClusterIdsProperty
+    fun neighborClusters() = neighborClustersProperty
     fun seoKeywords() = seoKeywordsProperty
 
     override fun writeExternal(out: ObjectOutput) {
         out.writeUTF(clusterIdProperty.get())
         out.writeObject(seoKeywords().toList())
-        out.writeObject(neighborClusterIds().toList())
+        out.writeObject(neighborClusters().toList())
     }
 
     override fun readExternal(input: ObjectInput) {
         setClusterId(input.readUTF())
         seoKeywords().addAll(observableArrayList(input.readObject() as List<SeoKeywordModel>))
-        neighborClusterIds().addAll(observableArrayList(input.readObject() as List<String>))
+        neighborClusters().addAll(observableArrayList(input.readObject() as List<GraphClusterValue>))
     }
 }

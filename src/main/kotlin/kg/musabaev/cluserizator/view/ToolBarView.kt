@@ -77,12 +77,13 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
             val parentClusterId = graphViewModel.getSelectedGraphId()
 
             // В глобальное хранилище добавляем новую ноду - кластеризуем ключи
-            graphClusterMap.map[clusterId] = GraphClusterValue(parentClusterId, clusterId, matchedKeywords)
+            val newCluster = GraphClusterValue(parentClusterId, clusterId, matchedKeywords)
+            graphClusterMap.map[clusterId] = newCluster
 
             // Раз кластеризовали ключи, удаляем из старого кластера и добавляем дочернюю ноду в список из родительской ноды
             val parentCluster = graphClusterMap.map[parentClusterId]!!
             parentCluster.seoKeywords().removeAll(matchedKeywords)
-            parentCluster.neighborClusterIds().add(clusterId)
+            parentCluster.neighborClusters().add(newCluster)
         }
 
         graphViewModel.selectedGraphIdProperty().addListener { _, _, newVal ->

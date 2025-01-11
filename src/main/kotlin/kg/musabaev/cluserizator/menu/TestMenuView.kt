@@ -9,7 +9,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TestMenuView() : MenuView() {
+private class TestMenuView() : MenuView() {
 
     private lateinit var graphClusterMap: GraphClusterMap
 
@@ -28,14 +28,14 @@ class TestMenuView() : MenuView() {
             val seoKeyword = SeoKeywordModel(keyword, otherMetas)
             a.add(seoKeyword)
         }
-        val node22 = GraphClusterValue(
+        /*val node22 = GraphClusterValue(
             clusterId = "22",
             seoKeywords = observableArrayList(a.subList(a.size / 2, a.size)))
         graphClusterMap.map["11"] = GraphClusterValue(
             clusterId = "11",
             seoKeywords = observableArrayList(a.subList(0, a.size / 2)),
             neighborClusterIds = listOf("22"))
-        graphClusterMap.map["22"] = node22
+        graphClusterMap.map["22"] = node22*/
     }
 
     override fun saveFile() {

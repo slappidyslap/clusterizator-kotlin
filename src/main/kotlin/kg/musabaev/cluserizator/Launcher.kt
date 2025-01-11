@@ -8,7 +8,6 @@ import javafx.stage.Stage
 import kg.musabaev.cluserizator.menu.MenuView
 import kg.musabaev.cluserizator.menu.MenuViewModel
 import kg.musabaev.cluserizator.menu.SaveLoadTestMenuView
-import kg.musabaev.cluserizator.menu.TestMenuView
 import kg.musabaev.cluserizator.view.*
 import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
 

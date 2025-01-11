@@ -13,6 +13,7 @@ import kg.musabaev.cluserizator.util.JsFunction
 import kg.musabaev.cluserizator.util.Utils
 import kg.musabaev.cluserizator.util.executeScriptSafely
 import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
+import kg.musabaev.cluserizator.viewmodel.GraphClusterValue
 import kg.musabaev.cluserizator.viewmodel.GraphViewModel
 import kg.musabaev.cluserizator.viewmodel.SeoKeywordTableViewModel
 import netscape.javascript.JSObject
@@ -59,14 +60,14 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
         graphClusterMap.map.addListener(MapChangeListener { change ->
             when {
                 change.wasAdded() -> {
-                    val clusterNodeId = change.key
-                    val clusterNode = change.valueAdded
-                    val parentClusterNodeId = clusterNode.getParentClusterId()
+                    val clusterNodeId: String = change.key
+                    val clusterNode: GraphClusterValue = change.valueAdded
+                    val parentClusterNodeId: String = clusterNode.getParentClusterId()
 
                     // Если мапа заграужется из сейва
                     if (menuViewModel.getIsLoadingFromSave()) {
                         if (clusterNodeId == "root") {
-                            addNodesRecursively(clusterNodeId)
+                            addNodesRecursively(clusterNode)
                             webEngine.addNode(clusterNodeId)
                         }
                     } // Если добавляется просто нода - редактирует граф
@@ -80,13 +81,12 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
         })
     }
 
-    private fun addNodesRecursively(nodeId: String) {
-        if (!graphClusterMap.map.containsKey(nodeId)) return
-        for (neighborClusterId in graphClusterMap.map[nodeId]!!.neighborClusterIds()) {
-            addNodesRecursively(neighborClusterId)
-            println("$nodeId, $neighborClusterId")
-            webEngine.addNode(neighborClusterId)
-            webEngine.addEdge(nodeId, neighborClusterId)
+    private fun addNodesRecursively(cluster: GraphClusterValue) {
+        if (cluster.neighborClusters().isEmpty()) return
+        for (neighbor in cluster.neighborClusters()) {
+            addNodesRecursively(neighbor)
+            webEngine.addNode(neighbor.getClusterId())
+            webEngine.addEdge(cluster.getClusterId(), neighbor.getClusterId())
         }
     }
 
