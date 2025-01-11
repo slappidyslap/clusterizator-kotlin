@@ -6,11 +6,11 @@ import eu.lestard.easydi.EasyDI
 import javafx.scene.Scene
 import javafx.stage.Stage
 import kg.musabaev.cluserizator.menu.MenuView
+import kg.musabaev.cluserizator.menu.MenuViewModel
 import kg.musabaev.cluserizator.menu.SaveLoadTestMenuView
 import kg.musabaev.cluserizator.menu.TestMenuView
 import kg.musabaev.cluserizator.view.*
 import kg.musabaev.cluserizator.viewmodel.GraphClusterMap
-import org.scenicview.ScenicView
 
 class Launcher : MvvmfxEasyDIApplication() {
     @Throws(Exception::class)
@@ -19,7 +19,7 @@ class Launcher : MvvmfxEasyDIApplication() {
         // MenuView создается вручную снизу с конкретной реализацией
         FluentViewLoader.javaView(ToolBarView::class.java).load()
         FluentViewLoader.javaView(ContentView::class.java).load()
-        FluentViewLoader.javaView(TestMenuView::class.java).load()
+        FluentViewLoader.javaView(SaveLoadTestMenuView::class.java).load()
         FluentViewLoader.javaView(GraphView::class.java).load()
         FluentViewLoader.javaView(SeoKeywordTableView::class.java).load()
 
@@ -42,7 +42,9 @@ class Launcher : MvvmfxEasyDIApplication() {
 
     override fun initEasyDi(context: EasyDI) {
         context.bindProvider(MenuView::class.java) {
-            SaveLoadTestMenuView(context.getInstance(GraphClusterMap::class.java))
+            SaveLoadTestMenuView(
+                context.getInstance(GraphClusterMap::class.java),
+                context.getInstance(MenuViewModel::class.java))
         }
     }
 }
