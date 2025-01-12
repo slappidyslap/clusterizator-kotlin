@@ -93,7 +93,6 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
             val selectedCluster =  graphClusters[graphViewModel.getSelectedClusterId()]!!
             val parentCluster = graphClusters[selectedCluster.getParentId()]
 
-            // TODO() скорее всего даже не будет возможности удалять ноды с соседями
             if (parentCluster == null || selectedCluster.neighbors().isNotEmpty()) {
                 val dialog = Alert(WARNING, "Нельзя удалять кластеры у которого есть дочерние кластеры")
                 dialog.show()
@@ -113,7 +112,7 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
     }
 
     private fun initBtnsColorsListeners() {
-        graphViewModel.selectedClusterIdProperty().addListener { _, _, selectedClusterId ->
+        /*graphViewModel.selectedClusterIdProperty().addListener { _, _, selectedClusterId ->
             val colors = getBgAndFgColorByString(selectedClusterId)
 
 //            animateBtnsFill(colors.first, colors.second)
@@ -141,7 +140,7 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
                 addNodeBtn.setStyle("-fx-text-fill", getRgbStringByColor(selectedClusterId))
                 deleteNodeBtn.setStyle("-fx-text-fill", getRgbStringByColor(selectedClusterId))
             }
-        }
+        }*/
     }
 
     private fun getBgAndFgColorByString(input: String): Pair<Color, Color> {

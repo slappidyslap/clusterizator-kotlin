@@ -23,7 +23,7 @@ function hashString(input) {
   return hash
 }
 
-function stringToColorForDarkTheme(input) {
+function stringToColor(input, isDarkTheme) {
   // Хэшируем строку в число
   const hash = hashString(input)
 
@@ -32,30 +32,24 @@ function stringToColorForDarkTheme(input) {
   const g = (hash & 0x00FF00) >> 8;
   const b = hash & 0x0000FF;
 
+  const factor = isDarkTheme ? 6 : 1
   // Применяем пастельный эффект для тёмной темы (увеличиваем яркость, снижаем насыщенность)
-  const pastelR = Math.floor((r + 128) / 6);
-  const pastelG = Math.floor((g + 128) / 6);
-  const pastelB = Math.floor((b + 128) / 6);
+  const pastelR = Math.floor((r + 128) / factor);
+  const pastelG = Math.floor((g + 128) / factor);
+  const pastelB = Math.floor((b + 128) / factor);
 
-  return {
-    value: `rgba(${pastelR}, ${pastelG}, ${pastelB}, 0.2)`,
-    r: pastelR,
-    g: pastelG,
-    b: pastelB
-  }
+  return `rgba(${pastelR}, ${pastelG}, ${pastelB}, 0.2)`
 }
 
-graph.on('selectNode', e => {
-  const nodeId = e.nodes[0]
-  const bgColor = stringToColorForDarkTheme(nodeId)
-  document.getElementById("graph").style.backgroundColor = bgColor.value
+graph.on('click', e => {
+  if (e.nodes.length) {
+    const nodeId = e.nodes[0]
+    const bgColor = stringToColor(nodeId, false)
+    document.getElementById("graph").style.backgroundColor = bgColor
 
-  GraphViewJs.selectedGraphId = nodeId
-  GraphView.selectNode(nodeId)
-});
-
-graph.on('deselectNode', e => {
-  document.getElementById("graph").style.backgroundColor = ''
-  GraphViewJs.selectedGraphId = ''
-  GraphView.deselectNode()
+    GraphView.selectNode(nodeId)
+  } else {
+    document.getElementById("graph").style.backgroundColor = ''
+    GraphView.deselectNode()
+  }
 })

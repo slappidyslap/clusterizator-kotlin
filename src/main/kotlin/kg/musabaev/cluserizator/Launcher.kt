@@ -24,7 +24,6 @@ class Launcher : MvvmfxEasyDIApplication() {
 
         stage.title = "Hello!"
         val scene = Scene(viewTuple.view)
-        scene.stylesheets.add("style.css")
         stage.scene = scene
         stage.isMaximized = true
         stage.show()
