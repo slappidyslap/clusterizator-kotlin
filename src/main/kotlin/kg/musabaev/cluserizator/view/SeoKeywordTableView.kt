@@ -57,6 +57,13 @@ class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTa
                     .items[e.tablePosition.row] as SeoKeyword)
                     .setKeyword(e.newValue)
             }
+            prefWidthProperty().bind(
+                Bindings.createDoubleBinding(
+                    { table.width - idColumn.width - 2 }, // -2 для небольшого отступа
+                    table.widthProperty(),
+                    idColumn.widthProperty()
+                )
+            )
         }
 
         table.columns.addAll(idColumn, keywordColumn)
