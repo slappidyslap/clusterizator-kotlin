@@ -7,10 +7,11 @@ import javafx.fxml.Initializable
 import javafx.scene.control.TableColumn
 import javafx.scene.control.TableView
 import javafx.scene.control.cell.PropertyValueFactory
+import javafx.scene.control.cell.TextFieldTableCell
 import javafx.scene.layout.BorderPane
 import kg.musabaev.cluserizator.domain.GraphClusters
-import kg.musabaev.cluserizator.viewmodel.GraphViewModel
 import kg.musabaev.cluserizator.domain.SeoKeyword
+import kg.musabaev.cluserizator.viewmodel.GraphViewModel
 import kg.musabaev.cluserizator.viewmodel.SeoKeywordTableViewModel
 import java.net.URL
 import java.util.*
@@ -40,15 +41,22 @@ class SeoKeywordTableView() : BorderPane(), Initializable, JavaView<SeoKeywordTa
     }
 
     private fun initTableView() {
+        table.isEditable = true
         val idColumn = TableColumn<SeoKeyword, String>("ID").apply {
 //            cellValueFactory = PropertyValueFactory("id")
         }
 
-        val keyColumn = TableColumn<SeoKeyword, String>("Ключевое слово").apply {
+        val keywordColumn = TableColumn<SeoKeyword, String>("Ключевое слово").apply {
             cellValueFactory = PropertyValueFactory("keyword")
+            cellFactory = TextFieldTableCell.forTableColumn()
+            setOnEditCommit { e ->
+                (e.tableView
+                    .items[e.tablePosition.row] as SeoKeyword)
+                    .setKeyword(e.newValue)
+            }
         }
 
-        table.columns.addAll(idColumn, keyColumn)
+        table.columns.addAll(idColumn, keywordColumn)
         super.setCenter(table)
         Bindings.bindContentBidirectional(table.items, keywordTableViewModel.keywords)
     }
