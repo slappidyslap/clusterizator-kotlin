@@ -11,6 +11,7 @@ import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
 import kg.musabaev.cluserizator.domain.GraphClusters
 import kg.musabaev.cluserizator.domain.GraphClusterItem
 import kg.musabaev.cluserizator.domain.SeoKeyword
+import kg.musabaev.cluserizator.file.CsvHandler
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.FileInputStream
@@ -52,7 +53,7 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
         }) // TODO мб потом перенести в initialize
     }
 
-    override fun loadFile() {
+    override fun loadProject() {
         menuViewModel.setIsLoadingFromSave(true)
         BufferedInputStream(FileInputStream("test.seoclztr")).use { input ->
             val root = JSON.parseObject<GraphClusterItem>(
@@ -65,7 +66,7 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
         menuViewModel.setIsLoadingFromSave(false)
     }
 
-    override fun saveFile() {
+    override fun saveProject() {
         // TODO() тут надо изучить какой размера буфера можно выделить
         BufferedOutputStream(FileOutputStream("test.seoclztr"), 128).use { output ->
             JSON.writeTo(
@@ -74,6 +75,28 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
                 UnquoteFieldName
             )
         }
+    }
+
+    override fun importCsv() {
+        val seoKeywords = mutableListOf<SeoKeyword>()
+        CsvHandler("proseller.csv")
+            .linesAsSequence()
+            .forEachIndexed { i, lines ->
+                if (i == 0) {
+                    graphClusters.keywordContext.clear()
+                    graphClusters.keywordContext.addAll(lines)
+                } else {
+                    val keyword = lines[0]
+                    val otherMetas = lines.subList(1, lines.lastIndex)
+                    seoKeywords.add(SeoKeyword(keyword, otherMetas))
+                }
+            }
+        graphClusters.clear() // TODO диалог окно на создание нового приложения/окн
+        graphClusters["root"] = GraphClusterItem("root", seoKeywords)
+    }
+
+    override fun exportProject() {
+        TODO("Not yet implemented")
     }
 
     private fun putClustersRecursively(cluster: GraphClusterItem) {

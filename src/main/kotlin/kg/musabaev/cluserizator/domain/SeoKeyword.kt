@@ -3,15 +3,10 @@ package kg.musabaev.cluserizator.domain
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections.observableArrayList
 
-class SeoKeyword() {
+class SeoKeyword(keyword: String, otherMetas: List<String>) {
 
-    constructor(keyword: String, otherMetas: List<String>) : this() {
-        keywordProperty.set(keyword)
-        otherMetasProperty.addAll(otherMetas)
-    }
-
-    private val keywordProperty = SimpleStringProperty()
-    private val otherMetasProperty = observableArrayList<String>()
+    private val keywordProperty = SimpleStringProperty(keyword)
+    private val otherMetasProperty = observableArrayList(otherMetas)
 
     fun getKeyword() = keywordProperty.get()
     fun setKeyword(keyword: String) = keywordProperty.set(keyword)

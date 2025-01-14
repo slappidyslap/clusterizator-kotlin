@@ -11,13 +11,19 @@ abstract class MenuView : MenuBar(), JavaView<MenuViewModel> {
     init {
         menus.addAll(Menu("Файл").apply {
             items.addAll(
-                MenuItem("Сохранить").apply { setOnAction { saveFile() } },
-                MenuItem("Загрузить").apply { setOnAction { loadFile() } }
+                MenuItem("Сохранить").apply { setOnAction { saveProject() } },
+                MenuItem("Загрузить").apply { setOnAction { loadProject() } },
+                MenuItem("Импортировать").apply { setOnAction { importCsv() } },
+                MenuItem("Экспортировать").apply { setOnAction { exportProject() } }
             )
         })
     }
 
-    abstract fun loadFile()
+    abstract fun loadProject()
 
-    abstract fun saveFile()
+    abstract fun saveProject()
+
+    abstract fun importCsv()
+
+    abstract fun exportProject()
 }

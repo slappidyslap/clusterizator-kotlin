@@ -17,7 +17,7 @@ private class TestMenuView() : MenuView() {
         this.graphClusters = graphClusters
     }
 
-    override fun loadFile() {
+    override fun loadProject() {
         val a = observableArrayList<SeoKeyword>()
         TestCsvFileHandler().getLinesCsv().forEach { line ->
             val values = line.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toList()
@@ -37,7 +37,15 @@ private class TestMenuView() : MenuView() {
         graphClusterMap.map["22"] = node22*/
     }
 
-    override fun saveFile() {
+    override fun saveProject() {
+        TODO("Not yet implemented")
+    }
 
+    override fun importCsv() {
+        TODO("Not yet implemented")
+    }
+
+    override fun exportProject() {
+        TODO("Not yet implemented")
     }
 }
