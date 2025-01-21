@@ -17,6 +17,8 @@
 - [ ] Undo/Redo система ~
 - [ ] Добавить ИИ, который будет рекомендовать, каким образом можно кластеризовать ~
 
+https://walczak.it/blog/distributing-javafx-desktop-applications-without-requiring-jvm-using-jlink-and-jpackage
+
 idea жрет 1100 - 3600 МБ
 
 ## 05.01

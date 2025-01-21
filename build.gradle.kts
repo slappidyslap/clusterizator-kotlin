@@ -4,11 +4,11 @@ plugins {
   id("org.jetbrains.kotlin.jvm") version "1.9.25"
   id("org.javamodularity.moduleplugin") version "1.8.15"
   id("org.openjfx.javafxplugin") version "0.0.13"
-  id("org.beryx.jlink") version "2.25.0"
+  id("org.beryx.jlink") version "3.1.1"
 }
 
 group = "kg.musabaev.clusterizator"
-version = "1.0-SNAPSHOT"
+version = "0.9.0"
 
 repositories {
   mavenCentral()
@@ -40,12 +40,13 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
   }
 }
 
+val javaFxVer = "21.0.5"
+val mvvmFxVer by extra("1.9.0-SNAPSHOT")
+
 javafx {
-  version = "21.0.5"
+  version = javaFxVer
   modules = listOf("javafx.controls", "javafx.fxml", "javafx.web", "javafx.swing")
 }
-
-val mvvmFxVer by extra("1.9.0-SNAPSHOT")
 
 dependencies {
   implementation(files("lib/scenicview.jar"))
@@ -63,9 +64,35 @@ tasks.test {
 
 jlink {
   imageZip.set(file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip"))
-  options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
+  options.set(listOf("--strip-debug", "--compress", "zip-6", "--no-header-files", "--no-man-pages"))
   launcher {
-    name = "app"
+    name = "clusterizator"
+  }
+  addExtraDependencies("javafx")
+  jpackage {
+    val installerType = project.findProperty("installerType") // we will pass this from the command line (example: -PinstallerType=msi)
+    if (installerType == "msi") {
+      installerOptions =  listOf(
+        "--win-per-user-install", "--win-dir-chooser",
+        "--win-menu", "--win-shortcut"
+      )
+    }
+    if (installerType in listOf("deb", "rpm")) {
+//      imageOptions += ['--icon', 'src/main/resources/pdfdecorator/gui/icon_256x256.png']
+      installerOptions = listOf(
+        "--linux-menu-group", "Office", "--linux-shortcut"
+      )
+    }
+    if (installerType == "deb") {
+      installerOptions = listOf(
+        "--linux-deb-maintainer", "office@walczak.it"
+      )
+    }
+    if (installerType == "rpm") {
+      installerOptions = listOf(
+        "--linux-rpm-license-type", "GPLv3"
+      )
+    }
   }
 }
 
