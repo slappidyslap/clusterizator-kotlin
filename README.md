@@ -22,6 +22,8 @@ https://walczak.it/blog/distributing-javafx-desktop-applications-without-requiri
 
 https://github.com/wiverson/maven-jpackage-template
 
+https://github.com/fvarrui/JavaPackager
+
 idea жрет 1100 - 3600 МБ
 
 ## 05.01
