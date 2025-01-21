@@ -15,7 +15,7 @@ class GraphClusterItem() {
         parentIdProperty.set(parentId)
         idProperty.set(id)
         seoKeywordsProperty.addAll(seoKeywords)
-        neighborProperty.addAll(neighbors)
+        neighborsProperty.addAll(neighbors)
     }
 
     constructor(parentId: String, id: String, seoKeywords: List<SeoKeyword>)
@@ -30,7 +30,7 @@ class GraphClusterItem() {
     private val parentIdProperty = SimpleStringProperty()
     private val idProperty = SimpleStringProperty()
     private val seoKeywordsProperty = observableArrayList<SeoKeyword>()
-    private val neighborProperty = observableArrayList<GraphClusterItem>()
+    private val neighborsProperty = observableArrayList<GraphClusterItem>()
 
     @JSONField(name = "parentId", ordinal = 1)
     fun getParentId() = parentIdProperty.get() ?: ""
@@ -47,15 +47,15 @@ class GraphClusterItem() {
     fun seoKeywords() = seoKeywordsProperty
 
     @JSONField(name = "neighbors", ordinal = 4)
-    fun getNeighborsAsList() = neighborProperty.toList()
-    fun neighbors() = neighborProperty
+    fun getNeighborsAsList() = neighborsProperty.toList()
+    fun neighbors() = neighborsProperty
 
     override fun toString(): String {
-        return "GraphClusterValue(" +
-                "\n\tparentIdProperty=${parentIdProperty.get()}," +
-                "\n\tidProperty=${idProperty.get()}," +
+        return "GraphClusterItem(" +
+                "\n\tparentId=${parentIdProperty.get()}," +
+                "\n\tid=${idProperty.get()}," +
                 "\n\tseoKeywordsCount=${seoKeywordsProperty.size}," +
-                "\n\tneighborsProperty=$neighborProperty)"
+                "\n\tneighbors=$neighborsProperty)"
     }
 
     override fun equals(other: Any?): Boolean {

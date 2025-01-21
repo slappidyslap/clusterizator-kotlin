@@ -5,6 +5,9 @@ import com.alibaba.fastjson2.JSONReader.Feature.AllowUnQuotedFieldNames
 import com.alibaba.fastjson2.JSONWriter.Feature.UnquoteFieldName
 import javafx.collections.FXCollections.observableArrayList
 import javafx.fxml.Initializable
+import javafx.scene.control.Alert
+import javafx.scene.control.ChoiceDialog
+import javafx.scene.control.Dialog
 import javafx.scene.control.Menu
 import javafx.scene.control.MenuItem
 import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
@@ -12,11 +15,9 @@ import kg.musabaev.cluserizator.domain.GraphClusters
 import kg.musabaev.cluserizator.domain.GraphClusterItem
 import kg.musabaev.cluserizator.domain.SeoKeyword
 import kg.musabaev.cluserizator.file.CsvHandler
-import java.io.BufferedInputStream
-import java.io.BufferedOutputStream
-import java.io.FileInputStream
-import java.io.FileOutputStream
+import java.io.*
 import java.net.URL
+import java.nio.file.Files
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -56,12 +57,13 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
     override fun loadProject() {
         menuViewModel.setIsLoadingFromSave(true)
         BufferedInputStream(FileInputStream("test.seoclztr")).use { input ->
-            val root = JSON.parseObject<GraphClusterItem>(
+            val loadedGraphClusters = JSON.parseObject<GraphClusters>( // TODO оптимизировать
                 input,
-                GraphClusterItem::class.java,
-                AllowUnQuotedFieldNames)
-            putClustersRecursively(root)
-            graphClusters["root"] = root
+                GraphClusters::class.java)
+            graphClusters.getKeywordContext().clear()
+            graphClusters.getKeywordContext().addAll(loadedGraphClusters.getKeywordContext())
+            graphClusters.getMap().clear()
+            graphClusters.getMap().putAll(loadedGraphClusters.getMap())
         }
         menuViewModel.setIsLoadingFromSave(false)
     }
@@ -71,8 +73,7 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
         BufferedOutputStream(FileOutputStream("test.seoclztr"), 128).use { output ->
             JSON.writeTo(
                 output,
-                graphClusters["root"],
-                UnquoteFieldName
+                graphClusters
             )
         }
     }
@@ -83,8 +84,8 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
             .linesAsSequence()
             .forEachIndexed { i, lines ->
                 if (i == 0) {
-                    graphClusters.keywordContext.clear()
-                    graphClusters.keywordContext.addAll(lines)
+                    graphClusters.getKeywordContext().clear()
+                    graphClusters.getKeywordContext().addAll(lines)
                 } else {
                     val keyword = lines[0]
                     val otherMetas = lines.subList(1, lines.lastIndex)
@@ -96,15 +97,36 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
     }
 
     override fun exportProject() {
-        TODO("Not yet implemented")
-    }
+        val root: GraphClusterItem = graphClusters["root"]!!
+        val csvHeader = graphClusters.getKeywordContext().joinToString(separator = ",")
+        File("testresult.csv").bufferedWriter().use { writer ->
+            writer.write("Group name,$csvHeader\n")
 
-    private fun putClustersRecursively(cluster: GraphClusterItem) {
-        if (cluster.neighbors().isEmpty()) return
-        for (neighbor in cluster.neighbors()) {
-            putClustersRecursively(neighbor)
-            graphClusters[neighbor.getId()] = neighbor
+            fun writeItem(key: String, item: GraphClusterItem, visited: MutableSet<String>) {
+                if (key in visited) return
+                visited.add(key)
+
+                val seoKeywords = item.seoKeywords()
+                val neighbors = item.neighbors()
+
+                if (seoKeywords.isEmpty()) {
+                    writer.write("$key,,\n")
+                } else {
+                    seoKeywords.forEach { keyword ->
+                        val metas = keyword.otherMetas().joinToString(separator = ",")
+                        writer.write("$key,${keyword.getKeyword()},$metas\n")
+                    }
+                }
+
+                neighbors.forEach { neighbor ->
+                    writeItem(neighbor.getId(), neighbor, visited)
+                }
+            }
+
+            val visited = mutableSetOf<String>()
+            writeItem("root", root, visited)
         }
+
     }
 
     override fun initialize(p0: URL?, p1: ResourceBundle?) {

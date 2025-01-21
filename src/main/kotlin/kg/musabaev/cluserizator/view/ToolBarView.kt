@@ -106,7 +106,7 @@ class ToolBarView() : HBox(), Initializable, JavaView<ToolBarViewModel> {
             parentCluster.seoKeywords().addAll(selectedSeoKeywords)
 
             // Удаляем из мапы и из списка соседей у родителя
-            graphClusters.map.remove(selectedCluster.getId())
+            graphClusters.getMap().remove(selectedCluster.getId())
             parentCluster.neighbors().remove(selectedCluster)
         }
     }

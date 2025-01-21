@@ -57,7 +57,7 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
     }
 
     private fun initListeners() {
-        graphClusters.map.addListener(MapChangeListener { change ->
+        graphClusters.getMap().addListener(MapChangeListener { change ->
             when {
                 change.wasAdded() -> {
                     val clusterNodeId: String = change.key
