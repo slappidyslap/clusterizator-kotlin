@@ -11,7 +11,7 @@ import java.io.StringWriter
 class ErrorDialog(exception: Throwable) : Alert(AlertType.ERROR) {
 
     init {
-        title = "Ошибка"
+        title = "Окно стектрейса"
         headerText = "Произошла ошибка"
 
         val label = Label("Стектрейс исключения:")

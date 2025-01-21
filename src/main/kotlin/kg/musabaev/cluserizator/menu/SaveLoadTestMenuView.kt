@@ -5,11 +5,8 @@ import com.alibaba.fastjson2.JSONReader.Feature.AllowUnQuotedFieldNames
 import com.alibaba.fastjson2.JSONWriter.Feature.UnquoteFieldName
 import javafx.collections.FXCollections.observableArrayList
 import javafx.fxml.Initializable
-import javafx.scene.control.Alert
-import javafx.scene.control.ChoiceDialog
-import javafx.scene.control.Dialog
-import javafx.scene.control.Menu
-import javafx.scene.control.MenuItem
+import javafx.scene.control.*
+import javafx.scene.control.Alert.AlertType.CONFIRMATION
 import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
 import kg.musabaev.cluserizator.domain.GraphClusters
 import kg.musabaev.cluserizator.domain.GraphClusterItem
@@ -92,8 +89,14 @@ class SaveLoadTestMenuView() : MenuView(), Initializable {
                     seoKeywords.add(SeoKeyword(keyword, otherMetas))
                 }
             }
-        graphClusters.clear() // TODO диалог окно на создание нового приложения/окн
-        graphClusters["root"] = GraphClusterItem("root", seoKeywords)
+        val result = Alert(CONFIRMATION).apply {
+            title = "Окно подтверждения"
+            headerText = "После импортирования, текущий процесс будет утерян. Вы правда хотите импортировать?"
+        }.showAndWait()
+        if (result.get() == ButtonType.OK) {
+            graphClusters.clear()
+            graphClusters["root"] = GraphClusterItem("root", seoKeywords)
+        }
     }
 
     override fun exportProject() {
