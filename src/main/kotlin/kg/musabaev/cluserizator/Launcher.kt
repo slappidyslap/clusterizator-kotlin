@@ -3,6 +3,7 @@ package kg.musabaev.cluserizator
 import de.saxsys.mvvmfx.FluentViewLoader
 import de.saxsys.mvvmfx.easydi.MvvmfxEasyDIApplication
 import eu.lestard.easydi.EasyDI
+import javafx.application.Platform
 import javafx.scene.Scene
 import javafx.stage.Stage
 import kg.musabaev.cluserizator.menu.MenuView
@@ -10,6 +11,8 @@ import kg.musabaev.cluserizator.menu.MenuViewModel
 import kg.musabaev.cluserizator.menu.SaveLoadTestMenuView
 import kg.musabaev.cluserizator.view.*
 import kg.musabaev.cluserizator.domain.GraphClusters
+import kg.musabaev.cluserizator.domain.component.ErrorDialog
+import java.awt.Dialog
 
 class Launcher : MvvmfxEasyDIApplication() {
     @Throws(Exception::class)
@@ -33,7 +36,15 @@ class Launcher : MvvmfxEasyDIApplication() {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            launch(Launcher::class.java)
+            try {
+                launch(Launcher::class.java)
+            } catch (e: Exception) {
+                Platform.runLater { ErrorDialog(e).show() }
+            }
+            Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
+                Platform.runLater { ErrorDialog(throwable).show() }
+            }
+
         }
         // fun main() = launch(Launcher::class.java)
     }
