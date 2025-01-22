@@ -1,13 +1,13 @@
 package kg.musabaev.cluserizator.file
 
-import java.io.BufferedReader
-import java.io.BufferedWriter
-import java.io.FileReader
-import java.io.FileWriter
+import java.io.*
 import java.util.stream.Stream
 import kotlin.streams.asSequence
 
 class CsvHandler(filename: String) {
+
+    constructor(file: File) : this (file.toString())
+
     private val bufReader by lazy { BufferedReader(FileReader(filename), 128) }
     private val bufWriter by lazy { BufferedWriter(FileWriter(filename), 128) }
 
