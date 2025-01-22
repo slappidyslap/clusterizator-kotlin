@@ -1,22 +1,24 @@
 package kg.musabaev.cluserizator.menu
 
 import com.alibaba.fastjson2.JSON
-import com.alibaba.fastjson2.JSONReader.Feature.AllowUnQuotedFieldNames
-import com.alibaba.fastjson2.JSONWriter.Feature.UnquoteFieldName
 import javafx.collections.FXCollections.observableArrayList
 import javafx.fxml.Initializable
-import javafx.scene.control.*
-import javafx.scene.control.Alert.AlertType.CONFIRMATION
+import javafx.scene.control.ButtonType
+import javafx.scene.control.Menu
+import javafx.scene.control.MenuItem
 import javafx.stage.FileChooser
 import javafx.stage.FileChooser.ExtensionFilter
-import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
-import kg.musabaev.cluserizator.domain.GraphClusters
 import kg.musabaev.cluserizator.domain.GraphClusterItem
+import kg.musabaev.cluserizator.domain.GraphClusters
 import kg.musabaev.cluserizator.domain.SeoKeyword
+import kg.musabaev.cluserizator.domain.component.NewProjectConfirmationDialog
 import kg.musabaev.cluserizator.file.CsvHandler
-import java.io.*
+import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.net.URL
-import java.nio.file.Files
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -55,6 +57,9 @@ class SimpleMenuView() : MenuView(), Initializable {
     override fun loadProject() {
         menuViewModel.setIsLoadingFromSave(true)
 
+        val result = NewProjectConfirmationDialog(NewProjectConfirmationDialog.Type.ON_LOAD).showAndWait()
+        if (result.get() == ButtonType.CANCEL) return
+
         val file = FileChooser().apply {
             extensionFilters.addAll(
                 ExtensionFilter("Clusterizator", "*.seoclztr"))
@@ -89,6 +94,9 @@ class SimpleMenuView() : MenuView(), Initializable {
 
     override fun importCsv() {
         val seoKeywords = mutableListOf<SeoKeyword>()
+        val result = NewProjectConfirmationDialog(NewProjectConfirmationDialog.Type.ON_IMPORT).showAndWait()
+        if (result.get() == ButtonType.CANCEL) return
+
         val file = FileChooser().apply {
             extensionFilters.addAll(
                 ExtensionFilter("Comma-Separated Values", "*.csv"))
@@ -104,16 +112,9 @@ class SimpleMenuView() : MenuView(), Initializable {
                     val keyword = lines[0]
                     val otherMetas = lines.subList(1, lines.lastIndex)
                     seoKeywords.add(SeoKeyword(keyword, otherMetas))
-                }
-            }
-        val result = Alert(CONFIRMATION).apply {
-            title = "Окно подтверждения"
-            headerText = "После импортирования, текущий процесс будет утерян. Вы правда хотите импортировать?"
-        }.showAndWait()
-        if (result.get() == ButtonType.OK) {
-            graphClusters.clear()
-            graphClusters["root"] = GraphClusterItem("root", seoKeywords)
-        }
+                } }
+        graphClusters.clear()
+        graphClusters["root"] = GraphClusterItem("root", seoKeywords)
     }
 
     override fun exportProject() {

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
   java
   application
@@ -34,10 +36,18 @@ tasks.withType<JavaCompile> {
   options.encoding = "UTF-8"
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+tasks.withType<KotlinCompile> {
   kotlinOptions {
     jvmTarget = "21"
   }
+}
+
+tasks.withType<Jar> {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.test {
+  useJUnitPlatform()
 }
 
 val javaFxVer = "21.0.5"
@@ -58,20 +68,19 @@ dependencies {
   implementation("de.saxsys:mvvmfx-easydi:$mvvmFxVer")
 }
 
-tasks.test {
-  useJUnitPlatform()
-}
-
 jlink {
   addExtraDependencies("javafx")
-  imageZip.set(file("${layout.buildDirectory}/distributions/app-${javafx.platform.classifier}.zip"))
-  options.set(listOf("--strip-debug", "--compress", "zip-6", "--no-header-files", "--no-man-pages"))
+  options.set(listOf(
+    "--strip-debug",
+    "--compress", "zip-6",
+    "--no-header-files",
+    "--no-man-pages"))
   launcher {
     name = "clusterizator"
-    noConsole = true
   }
+  imageZip.set(file("build/distributions/${name}-${version}-${javafx.platform.classifier}.zip"))
 
-  jpackage {
+  /*jpackage {
     val installerType = project.findProperty("installerType") // we will pass this from the command line (example: -PinstallerType=msi)
 
     when (installerType) {
@@ -95,8 +104,19 @@ jlink {
           "--mac-package-identifier", "kg.musabaev.clusterizator")
       }
     }
-  }
+  }*/
 }
+
+//sourceSets {
+//  main {
+//    java {
+//      resources {
+//        srcDir("src/main/resources")
+//        include("**/*.html", "**/*.css", "**/*.js")
+//      }
+//    }
+//  }
+//}
 
 tasks.named("jlinkZip") {
   group = "distribution"
