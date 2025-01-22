@@ -63,7 +63,7 @@ class SimpleMenuView() : MenuView(), Initializable {
         val file = FileChooser().apply {
             extensionFilters.addAll(
                 ExtensionFilter("Clusterizator", "*.seoclztr"))
-        }.showOpenDialog(null)
+        }.showOpenDialog(this.scene.window)
 
         BufferedInputStream(FileInputStream(file)).use { input ->
             val loadedGraphClusters = JSON.parseObject<GraphClusters>( // TODO оптимизировать
@@ -81,7 +81,7 @@ class SimpleMenuView() : MenuView(), Initializable {
         val file = FileChooser().apply {
             extensionFilters.addAll(
                 ExtensionFilter("Clusterizator", "*.seoclztr"))
-        }.showSaveDialog(null)
+        }.showSaveDialog(this.scene.window)
 
         // TODO() тут надо изучить какой размера буфера можно выделить
         BufferedOutputStream(FileOutputStream(file), 128).use { output ->
@@ -100,7 +100,7 @@ class SimpleMenuView() : MenuView(), Initializable {
         val file = FileChooser().apply {
             extensionFilters.addAll(
                 ExtensionFilter("Comma-Separated Values", "*.csv"))
-        }.showOpenDialog(null)
+        }.showOpenDialog(this.scene.window)
 
         CsvHandler(file)
             .linesAsSequence()
@@ -123,7 +123,7 @@ class SimpleMenuView() : MenuView(), Initializable {
         val file = FileChooser().apply {
             extensionFilters.addAll(
                 ExtensionFilter("Comma-Separated Values", "*.csv"))
-        }.showSaveDialog(null)
+        }.showSaveDialog(this.scene.window)
 
         file.bufferedWriter().use { writer ->
             writer.write("Group name,$csvHeader\n")

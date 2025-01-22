@@ -1,5 +1,6 @@
 package kg.musabaev.cluserizator.domain
 
+import com.alibaba.fastjson2.annotation.JSONCreator
 import com.alibaba.fastjson2.annotation.JSONField
 import javafx.collections.FXCollections.observableHashMap
 import javafx.collections.ObservableMap
@@ -22,6 +23,7 @@ class GraphClusters {
     @Inject
     constructor()
 
+    @JSONCreator
     constructor(keywordContext: List<String>, rootCluster: GraphClusterItem) : this() {
         keywordContextProperty.addAll(keywordContext)
         putClustersRecursively(rootCluster)
