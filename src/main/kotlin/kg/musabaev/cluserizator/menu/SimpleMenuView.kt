@@ -12,12 +12,10 @@ import kg.musabaev.cluserizator.domain.GraphClusterItem
 import kg.musabaev.cluserizator.domain.GraphClusters
 import kg.musabaev.cluserizator.domain.SeoKeyword
 import kg.musabaev.cluserizator.domain.component.NewProjectConfirmationDialog
+import kg.musabaev.cluserizator.domain.component.NewProjectConfirmationDialog.Type
 import kg.musabaev.cluserizator.file.CsvHandler
 import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
-import java.io.BufferedInputStream
-import java.io.BufferedOutputStream
-import java.io.FileInputStream
-import java.io.FileOutputStream
+import java.io.*
 import java.net.URL
 import java.util.*
 import javax.inject.Inject
@@ -49,7 +47,7 @@ class SimpleMenuView() : MenuView(), Initializable {
                     graphClusters["root"] = GraphClusterItem(
                         id = "root",
                         seoKeywords = observableArrayList(a))
-                }}
+                }},
             )
         }) // TODO мб потом перенести в initialize
     }
@@ -57,15 +55,10 @@ class SimpleMenuView() : MenuView(), Initializable {
     override fun loadProject() {
         menuViewModel.setIsLoadingFromSave(true)
 
-        val result = NewProjectConfirmationDialog(NewProjectConfirmationDialog.Type.ON_LOAD).showAndWait()
-        if (result.get() == ButtonType.CANCEL) return
+        areThereNoClustersOrElseDialog(Type.ON_LOAD) ?: return
+        val seoclztr = chooseSeoclztr(ChooseFileTo.OPEN) ?: return
 
-        val file = FileChooser().apply {
-            extensionFilters.addAll(
-                ExtensionFilter("Clusterizator", "*.seoclztr"))
-        }.showOpenDialog(this.scene.window)
-
-        BufferedInputStream(FileInputStream(file)).use { input ->
+        BufferedInputStream(FileInputStream(seoclztr)).use { input ->
             val loadedGraphClusters = JSON.parseObject<GraphClusters>( // TODO оптимизировать
                 input,
                 GraphClusters::class.java)
@@ -74,17 +67,15 @@ class SimpleMenuView() : MenuView(), Initializable {
             graphClusters.getMap().clear()
             graphClusters.getMap().putAll(loadedGraphClusters.getMap())
         }
+
         menuViewModel.setIsLoadingFromSave(false)
     }
 
     override fun saveProject() {
-        val file = FileChooser().apply {
-            extensionFilters.addAll(
-                ExtensionFilter("Clusterizator", "*.seoclztr"))
-        }.showSaveDialog(this.scene.window)
+        val seoclztr = chooseSeoclztr(ChooseFileTo.SAVE) ?: return
 
         // TODO() тут надо изучить какой размера буфера можно выделить
-        BufferedOutputStream(FileOutputStream(file), 128).use { output ->
+        BufferedOutputStream(FileOutputStream(seoclztr), 128).use { output ->
             JSON.writeTo(
                 output,
                 graphClusters
@@ -93,16 +84,11 @@ class SimpleMenuView() : MenuView(), Initializable {
     }
 
     override fun importCsv() {
+        areThereNoClustersOrElseDialog(Type.ON_IMPORT) ?: return
+        val csv = chooseCsv(ChooseFileTo.OPEN) ?: return
+
         val seoKeywords = mutableListOf<SeoKeyword>()
-        val result = NewProjectConfirmationDialog(NewProjectConfirmationDialog.Type.ON_IMPORT).showAndWait()
-        if (result.get() == ButtonType.CANCEL) return
-
-        val file = FileChooser().apply {
-            extensionFilters.addAll(
-                ExtensionFilter("Comma-Separated Values", "*.csv"))
-        }.showOpenDialog(this.scene.window)
-
-        CsvHandler(file)
+        CsvHandler(csv)
             .linesAsSequence()
             .forEachIndexed { i, lines ->
                 if (i == 0) {
@@ -118,14 +104,11 @@ class SimpleMenuView() : MenuView(), Initializable {
     }
 
     override fun exportProject() {
+        val csv = chooseCsv(ChooseFileTo.SAVE) ?: return
+
         val root: GraphClusterItem = graphClusters["root"]!!
         val csvHeader = graphClusters.getKeywordContext().joinToString(separator = ",")
-        val file = FileChooser().apply {
-            extensionFilters.addAll(
-                ExtensionFilter("Comma-Separated Values", "*.csv"))
-        }.showSaveDialog(this.scene.window)
-
-        file.bufferedWriter().use { writer ->
+        csv.bufferedWriter().use { writer ->
             writer.write("Group name,$csvHeader\n")
 
             fun writeItem(key: String, item: GraphClusterItem, visited: MutableSet<String>) {
@@ -136,7 +119,7 @@ class SimpleMenuView() : MenuView(), Initializable {
                 val neighbors = item.neighbors()
 
                 if (seoKeywords.isEmpty()) {
-                    writer.write("$key,,\n")
+                    writer.write("$key,,\n") //FIXME
                 } else {
                     seoKeywords.forEach { keyword ->
                         val metas = keyword.otherMetas().joinToString(separator = ",")
@@ -157,5 +140,37 @@ class SimpleMenuView() : MenuView(), Initializable {
 
     override fun initialize(p0: URL?, p1: ResourceBundle?) {
 //        TODO() срабатывает
+    }
+
+    private fun chooseCsv(to: ChooseFileTo): File? {
+        val csv = FileChooser().apply {
+            extensionFilters.addAll(
+                ExtensionFilter("Comma-Separated Values", "*.csv"))
+        }
+        return if (to == ChooseFileTo.SAVE)
+            csv.showSaveDialog(this.scene.window)
+        else csv.showOpenDialog(this.scene.window)
+    }
+
+    private fun chooseSeoclztr(to: ChooseFileTo): File? {
+        val seoclztr = FileChooser().apply {
+            extensionFilters.addAll(
+                ExtensionFilter("Clusterizator", "*.seoclztr"))
+        }
+        return if (to == ChooseFileTo.SAVE)
+            seoclztr.showSaveDialog(this.scene.window)
+        else seoclztr.showOpenDialog(this.scene.window)
+    }
+
+    private fun areThereNoClustersOrElseDialog(type: Type): Any? {
+        if (graphClusters.getMap().isEmpty().not()) {
+            val result = NewProjectConfirmationDialog(type).showAndWait()
+            if (result.get() == ButtonType.CANCEL) return null
+        }
+        return Any()
+    }
+
+    enum class ChooseFileTo {
+        SAVE, OPEN
     }
 }
