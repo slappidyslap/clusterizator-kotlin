@@ -107,54 +107,60 @@ jlink {
   }*/
 }
 
-//sourceSets {
-//  main {
-//    java {
-//      resources {
-//        srcDir("src/main/resources")
-//        include("**/*.html", "**/*.css", "**/*.js")
-//      }
-//    }
-//  }
-//}
-
 tasks.named("jlinkZip") {
   group = "distribution"
 }
 
-tasks.register<Copy>("copyVisJsLib") {
+tasks.register<Copy>("processVisJsLibToProd") {
   group = "other"
 
+  // copy
   from("lib") {
     include("vis-network.min.js")
   }
   into("src/main/resources/kg/musabaev/cluserizator/view")
-}
 
-tasks.named("processResources") {
-  dependsOn("copyVisJsLib")
-}
-
-tasks.register("updateVisJsLibUrl") {
-  dependsOn("copyVisJsLib")
-  group = "other"
-
+  // change url to lib
   val htmlFile = file("src/main/resources/kg/musabaev/cluserizator/view/graphView.html")
+
   val htmlContent = htmlFile.readText()
   val visJsLibUrl = "../../../../../../../lib/vis-network.min.js"
 
-  val updatedHtmlContent = if (htmlContent.contains(visJsLibUrl))
-    htmlContent.replace(visJsLibUrl, "vis-network.min.js")
-  else htmlContent.replace("vis-network.min.js", visJsLibUrl)
+  val updatedHtmlContent = htmlContent.replace(visJsLibUrl, "vis-network.min.js")
 
   htmlFile.writeText(updatedHtmlContent)
 }
 
-tasks.register<Delete>("deleteVisJsLib") {
-  delete("src/main/resources/kg/musabaev/cluserizator/view/vis-network.min.js")
+tasks.named("processResources") {
+  dependsOn("processVisJsLibToProd")
 }
 
-tasks.named("jar") {
-  finalizedBy("deleteVisJsLib", "updateVisJsLibUrl")
+
+fun processVisJsLibToDev() {
+  val resourcesViewFolder = file("src/main/resources/kg/musabaev/cluserizator/view")
+  delete(file("$resourcesViewFolder/vis-network.min.js"))
+
+  val htmlFile = file("$resourcesViewFolder/graphView.html")
+  if (!htmlFile.exists()) {
+    throw GradleException("File graphView.html does not exist!")
+  }
+
+  val htmlContent = htmlFile.readText()
+  val visJsLibUrl = "../../../../../../../lib/vis-network.min.js"
+
+  val updatedHtmlContent = htmlContent.replace("vis-network.min.js", visJsLibUrl)
+
+  htmlFile.writeText(updatedHtmlContent)
 }
 
+tasks.named("build") {
+  doLast {
+    processVisJsLibToDev()
+  }
+}
+
+tasks.named("jlink") {
+  doLast {
+    processVisJsLibToDev()
+  }
+}
