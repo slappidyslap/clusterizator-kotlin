@@ -146,6 +146,7 @@ class SimpleMenuView() : MenuView(), Initializable {
         val csv = FileChooser().apply {
             extensionFilters.addAll(
                 ExtensionFilter("Comma-Separated Values", "*.csv"))
+            initialDirectory = File("D:/JvmProjects/cluserizator-26-12") // TODO кешировать
         }
         return if (to == ChooseFileTo.SAVE)
             csv.showSaveDialog(this.scene.window)
@@ -156,6 +157,7 @@ class SimpleMenuView() : MenuView(), Initializable {
         val seoclztr = FileChooser().apply {
             extensionFilters.addAll(
                 ExtensionFilter("Clusterizator", "*.seoclztr"))
+            initialDirectory = File("D:/JvmProjects/cluserizator-26-12")
         }
         return if (to == ChooseFileTo.SAVE)
             seoclztr.showSaveDialog(this.scene.window)

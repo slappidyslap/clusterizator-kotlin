@@ -121,3 +121,40 @@ jlink {
 tasks.named("jlinkZip") {
   group = "distribution"
 }
+
+tasks.register<Copy>("copyVisJsLib") {
+  group = "other"
+
+  from("lib") {
+    include("vis-network.min.js")
+  }
+  into("src/main/resources/kg/musabaev/cluserizator/view")
+}
+
+tasks.named("processResources") {
+  dependsOn("copyVisJsLib")
+}
+
+tasks.register("updateVisJsLibUrl") {
+  dependsOn("copyVisJsLib")
+  group = "other"
+
+  val htmlFile = file("src/main/resources/kg/musabaev/cluserizator/view/graphView.html")
+  val htmlContent = htmlFile.readText()
+  val visJsLibUrl = "../../../../../../../lib/vis-network.min.js"
+
+  val updatedHtmlContent = if (htmlContent.contains(visJsLibUrl))
+    htmlContent.replace(visJsLibUrl, "vis-network.min.js")
+  else htmlContent.replace("vis-network.min.js", visJsLibUrl)
+
+  htmlFile.writeText(updatedHtmlContent)
+}
+
+tasks.register<Delete>("deleteVisJsLib") {
+  delete("src/main/resources/kg/musabaev/cluserizator/view/vis-network.min.js")
+}
+
+tasks.named("jar") {
+  finalizedBy("deleteVisJsLib", "updateVisJsLibUrl")
+}
+
