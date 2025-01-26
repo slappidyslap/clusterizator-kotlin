@@ -13,6 +13,7 @@ import kg.musabaev.cluserizator.menu.MenuViewModel
 import kg.musabaev.cluserizator.menu.SaveLoadTestMenuView
 import kg.musabaev.cluserizator.menu.SimpleMenuView
 import kg.musabaev.cluserizator.view.*
+import kotlin.system.exitProcess
 
 class Launcher : MvvmfxEasyDIApplication() {
     @Throws(Exception::class)
@@ -29,6 +30,10 @@ class Launcher : MvvmfxEasyDIApplication() {
         val scene = Scene(viewTuple.view)
         stage.scene = scene
         stage.isMaximized = true
+        stage.setOnCloseRequest {
+            Platform.exit()
+            exitProcess(0)
+        }
         stage.show()
 //        ScenicView.show(scene)
     }

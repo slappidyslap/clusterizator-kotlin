@@ -111,17 +111,19 @@ tasks.named("jlinkZip") {
   group = "distribution"
 }
 
-tasks.register<Copy>("processVisJsLibToProd") {
+tasks.register("processVisJsLibToProd") {
   group = "other"
 
-  // copy
-  from("lib") {
-    include("vis-network.min.js")
+  val resourcesViewFolder = file("src/main/resources/kg/musabaev/cluserizator/view")
+  copy {
+    from("lib") {
+      include("vis-network.min.js")
+    }
+    into(resourcesViewFolder)
   }
-  into("src/main/resources/kg/musabaev/cluserizator/view")
 
   // change url to lib
-  val htmlFile = file("src/main/resources/kg/musabaev/cluserizator/view/graphView.html")
+  val htmlFile = file("$resourcesViewFolder/graphView.html")
 
   val htmlContent = htmlFile.readText()
   val visJsLibUrl = "../../../../../../../lib/vis-network.min.js"
@@ -131,12 +133,9 @@ tasks.register<Copy>("processVisJsLibToProd") {
   htmlFile.writeText(updatedHtmlContent)
 }
 
-tasks.named("processResources") {
-  dependsOn("processVisJsLibToProd")
-}
+tasks.register("cleanVisJsLibProdProcess") {
+  group = "other"
 
-
-fun processVisJsLibToDev() {
   val resourcesViewFolder = file("src/main/resources/kg/musabaev/cluserizator/view")
   delete(file("$resourcesViewFolder/vis-network.min.js"))
 
@@ -151,16 +150,4 @@ fun processVisJsLibToDev() {
   val updatedHtmlContent = htmlContent.replace("vis-network.min.js", visJsLibUrl)
 
   htmlFile.writeText(updatedHtmlContent)
-}
-
-tasks.named("build") {
-  doLast {
-    processVisJsLibToDev()
-  }
-}
-
-tasks.named("jlink") {
-  doLast {
-    processVisJsLibToDev()
-  }
 }
