@@ -20,7 +20,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SaveLoadTestMenuView() : MenuView(), Initializable {
+private class SaveLoadTestMenuView() : MenuView(), Initializable {
 
     private lateinit var graphClusters: GraphClusters
     private lateinit var menuViewModel: MenuViewModel

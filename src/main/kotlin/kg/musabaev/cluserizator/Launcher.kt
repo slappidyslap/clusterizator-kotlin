@@ -10,7 +10,6 @@ import kg.musabaev.cluserizator.domain.GraphClusters
 import kg.musabaev.cluserizator.domain.component.ErrorDialog
 import kg.musabaev.cluserizator.menu.MenuView
 import kg.musabaev.cluserizator.menu.MenuViewModel
-import kg.musabaev.cluserizator.menu.SaveLoadTestMenuView
 import kg.musabaev.cluserizator.menu.SimpleMenuView
 import kg.musabaev.cluserizator.view.*
 import kotlin.system.exitProcess
@@ -22,7 +21,6 @@ class Launcher : MvvmfxEasyDIApplication() {
         // MenuView создается вручную снизу с конкретной реализацией
         FluentViewLoader.javaView(ToolBarView::class.java).load()
         FluentViewLoader.javaView(ContentView::class.java).load()
-        FluentViewLoader.javaView(SaveLoadTestMenuView::class.java).load()
         FluentViewLoader.javaView(GraphView::class.java).load()
         FluentViewLoader.javaView(SeoKeywordTableView::class.java).load()
 

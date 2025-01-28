@@ -15,6 +15,8 @@ import kg.musabaev.cluserizator.domain.component.NewProjectConfirmationDialog
 import kg.musabaev.cluserizator.domain.component.NewProjectConfirmationDialog.Type
 import kg.musabaev.cluserizator.file.CsvHandler
 import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
+import kg.musabaev.cluserizator.util.executeScriptSafely
+import kg.musabaev.cluserizator.view.GraphView
 import java.io.*
 import java.net.URL
 import java.util.*
@@ -48,6 +50,17 @@ class SimpleMenuView() : MenuView(), Initializable {
                         id = "root",
                         seoKeywords = observableArrayList(a))
                 }},
+                /*MenuItem("graph.redraw()").apply { setOnAction {
+                    GraphView.webEngine.executeScriptSafely("graph.redraw()")
+                } },
+                MenuItem("webEngine.reload()").apply { setOnAction {
+                    GraphView.webEngine.reload()
+                } },
+                MenuItem("Graph Info").apply { setOnAction { // TODO Вывод данных о графе из js и из kotlin
+                    println("GraphClusters ${graphClusters.toString()}")
+                    println("Vis.js nodes ${GraphView.webEngine.executeScriptSafely("graph.body.nodes").toString()}")
+                    println("Vis.js edges ${GraphView.webEngine.executeScriptSafely("graph.body.edges")}")
+                } }*/
             )
         }) // TODO мб потом перенести в initialize
     }

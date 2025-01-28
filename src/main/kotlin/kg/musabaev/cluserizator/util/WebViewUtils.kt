@@ -3,6 +3,7 @@ package kg.musabaev.cluserizator.util
 import javafx.concurrent.Worker
 import javafx.scene.web.WebEngine
 import javafx.scene.web.WebView
+import netscape.javascript.JSObject
 
 fun WebView.executeScriptLater(script: String): Any? {
     var any: Any? = null
@@ -23,3 +24,7 @@ fun WebEngine.executeScriptSafely(script: String): Any? {
         return null
     }
 }
+
+//fun JSObject.contentToString() {
+//    this.
+//}

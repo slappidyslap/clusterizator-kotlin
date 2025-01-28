@@ -69,16 +69,22 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
                         if (clusterNodeId == "root") {
                             addNodesRecursively(clusterNode)
                             webEngine.addNode(clusterNodeId)
+                            webEngine.redraw() // не понятно почему, но тут явно надо писать
                         }
                     } // Если добавляется просто нода - редактирует граф
                     else {
                         webEngine.addNode(clusterNodeId)
                         webEngine.addEdge(parentClusterNodeId, clusterNodeId)
                     }
+                    webEngine.redraw()
                 }
                 change.wasRemoved() -> {
-                    webEngine.deleteSelected()
-
+                    if (change.map.isEmpty()) {
+                        webEngine.reload()
+                    } else {
+                        webEngine.deleteSelected()
+                    }
+                    webEngine.redraw()
                 }
             }
         })
@@ -104,7 +110,7 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
     }
 
     private fun WebEngine.addNode(id: String) {
-        this.executeScriptSafely("GraphViewJs.addNode('$id')") // TODO почистить
+        this.executeScriptSafely("GraphViewJs.addNode('$id')")
     }
 
     private fun WebEngine.addEdge(from: String, to: String) {
@@ -112,6 +118,10 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
     }
 
     private fun WebEngine.deleteSelected() {
-        this.executeScriptSafely("graph.deleteSelected()")
+        this.executeScriptSafely("graph.deleteSelected()") // TODO в интерфейс
+    }
+
+    private fun WebEngine.redraw() {
+        this.executeScriptSafely("graph.redraw()") // TODO в интерфейс
     }
 }
