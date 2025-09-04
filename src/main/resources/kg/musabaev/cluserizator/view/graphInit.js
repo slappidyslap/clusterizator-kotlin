@@ -8,6 +8,9 @@ const options = {
   edges: {
     smooth: {
       forceDirection: "none"
+    },
+    arrows: {
+      to: { enabled: true }
     }
   },
   physics: {
@@ -17,13 +20,13 @@ const options = {
     minVelocity: 0.75,
     solver: "forceAtlas2Based"
   },
-  layout: {
-    hierarchical: {
-      sortMethod: 'directed', // hubsize, directed
-      shakeTowards: 'roots', // roots, leaves
-      direction: 'UD' // UD, DU, LR, RL
-    }
-  }
+//  layout: {
+////    hierarchical: {
+////      sortMethod: 'directed', // hubsize, directed
+////      shakeTowards: 'roots', // roots, leaves
+////      direction: 'UD' // UD, DU, LR, RL
+////    }
+//  }
 }
 const network = new vis.Network(container, data, options);
 
