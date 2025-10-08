@@ -49,26 +49,33 @@
 Простой пример как если мапа была бы в виде JSON:
 
 ```json
-"graph": { // Глобальный словарь
-  "root": {
-    parentId: "",
-    neighbors: ["rainbow six siege"],
-    keywords: ["купить игру", "купить ключ", "купить офлайн аккаунт", "купить аккаунт дешево"] // и другие ключевики
-  }
-  "rainbow six siege": {
-    parentId: "root",
-    neighbors: ["аккаунт"],
-    keywords: ["купить rainbow six siege", "купить аккаунт rainbow six siege", "купить ключ rainbow six siege"]
-  },
-  "аккаунт": {
-    parentId: "rainbow six siege",
-    neighbors: [],
-    keywords: ["купить аккаунт rainbow six siege"]
-  },
-  "ключ": {
-    parentId: "rainbow six siege",
-    neighbors: [],
-    keywords: ["купить ключ rainbow six siege"]
+{
+  "graph": {
+    "root": {
+      "parentId": "",
+      "neighbors": ["rainbow six siege"],
+      "keywords": [
+        "купить игру",
+        "купить ключ",
+        "купить офлайн аккаунт",
+        "купить аккаунт дешево"
+      ]
+    },
+    "rainbow six siege": {
+      "parentId": "root",
+      "neighbors": ["аккаунт", "ключ"],
+      "keywords": ["купить rainbow six siege"]
+    },
+    "аккаунт": {
+      "parentId": "rainbow six siege",
+      "neighbors": [],
+      "keywords": ["купить аккаунт rainbow six siege"]
+    },
+    "ключ": {
+      "parentId": "rainbow six siege",
+      "neighbors": [],
+      "keywords": ["купить ключ rainbow six siege"]
+    }
   }
 }
 ```
