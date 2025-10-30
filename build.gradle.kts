@@ -7,6 +7,7 @@ plugins {
   id("org.javamodularity.moduleplugin") version "1.8.15"
   id("org.openjfx.javafxplugin") version "0.0.13"
   id("org.beryx.jlink") version "3.1.1"
+  id("de.jjohannes.extra-java-module-info") version "0.16"
 }
 
 group = "kg.musabaev.clusterizator"
@@ -28,8 +29,7 @@ java {
 }
 
 application {
-  mainModule.set("kg.musabaev.cluserizator")
-  mainClass.set("kg.musabaev.cluserizator.Launcher")
+  mainClass.set("kg.musabaev.cluserizator.LauncherKt")
 }
 
 tasks.withType<JavaCompile> {
@@ -51,11 +51,11 @@ tasks.test {
 }
 
 val javaFxVer = "21.0.5"
-val mvvmFxVer by extra("1.9.0-SNAPSHOT")
+val mvvmFxVer ="1.8.0"
 
 javafx {
   version = javaFxVer
-  modules = listOf("javafx.controls", "javafx.fxml", "javafx.web", "javafx.swing")
+  modules = listOf("javafx.web", "javafx.controls", "javafx.fxml", "javafx.swing")
 }
 
 dependencies {
@@ -66,6 +66,16 @@ dependencies {
 //  implementation("com.vladsch.javafx-webview-debugger:javafx-webview-debugger:0.8.0")
   implementation("de.saxsys:mvvmfx:$mvvmFxVer")
   implementation("de.saxsys:mvvmfx-easydi:$mvvmFxVer")
+}
+
+extraJavaModuleInfo {
+  module("de.saxsys:mvvmfx-easydi", "mvvmfx.easydi")
+  module("annotations-13.0.jar", "annotations.13.0.jar")
+  module("slf4j-api-1.7.12.jar", "slf4j.api.1.7.12.jar")
+  module("typetools-0.6.1.jar", "typetools.0.6.1.jar")
+  module("doc-annotations-0.2.jar", "doc.annotations.0.2.jar")
+  module("easy-di-0.3.0.jar", "easy.di.0.3.0.jar")
+  module("javax.inject-1.jar", "javax.inject.1.jar")
 }
 
 jlink {
