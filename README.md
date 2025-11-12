@@ -119,18 +119,18 @@
 
 ```kotlin
 override fun initialize(p0: URL?, p1: ResourceBundle?) {
-        webEngine.load(this::class.java.getResource("graphView.html")!!.toString())
-        super.setCenter(webView)
+    webEngine.load(this::class.java.getResource("graphView.html")!!.toString())
+    super.setCenter(webView)
 
-        webView.engine.loadWorker.stateProperty().addListener {_, _, newVal ->
-            if (newVal == Worker.State.SUCCEEDED) {
-                val windowJs: JSObject = webEngine.executeScript("window") as JSObject
-                windowJs.setMember(this.javaClass.simpleName, this)
-            }
+    webView.engine.loadWorker.stateProperty().addListener {_, _, newVal ->
+        if (newVal == Worker.State.SUCCEEDED) {
+            val windowJs: JSObject = webEngine.executeScript("window") as JSObject
+            windowJs.setMember(this.javaClass.simpleName, this)
         }
-
-        initListeners()
     }
+
+    initListeners()
+}
 ```
 
 ## Синхронизация состояния

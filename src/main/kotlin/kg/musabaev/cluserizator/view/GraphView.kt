@@ -8,12 +8,11 @@ import javafx.fxml.Initializable
 import javafx.scene.layout.BorderPane
 import javafx.scene.web.WebEngine
 import javafx.scene.web.WebView
+import kg.musabaev.cluserizator.domain.GraphClusterItem
+import kg.musabaev.cluserizator.domain.GraphClusters
 import kg.musabaev.cluserizator.menu.MenuViewModel
 import kg.musabaev.cluserizator.util.JsFunction
-import kg.musabaev.cluserizator.util.Utils
 import kg.musabaev.cluserizator.util.executeScriptSafely
-import kg.musabaev.cluserizator.domain.GraphClusters
-import kg.musabaev.cluserizator.domain.GraphClusterItem
 import kg.musabaev.cluserizator.viewmodel.GraphViewModel
 import kg.musabaev.cluserizator.viewmodel.SeoKeywordTableViewModel
 import netscape.javascript.JSObject
@@ -44,7 +43,7 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
 
     override fun initialize(p0: URL?, p1: ResourceBundle?) {
         webEngine.load(this::class.java.getResource("graphView.html")!!.toString())
-        super.setCenter(webView)
+        super.center = webView
 
         webView.engine.loadWorker.stateProperty().addListener {_, _, newVal ->
             if (newVal == Worker.State.SUCCEEDED) {
@@ -100,11 +99,13 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
     }
 
     @JsFunction
+    @Suppress("unused")
     fun selectNode(id: String) {
         graphViewModel.setSelectedClusterId(id)
     }
 
     @JsFunction
+    @Suppress("unused")
     fun deselectNode() {
         graphViewModel.setSelectedClusterId("")
     }
