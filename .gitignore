@@ -45,6 +45,6 @@ bin/
 *.seoclztr
 replay_pid*.log
 hs_err_pid*.log
-*.csv
+*.csv/
 aboba.md
 src/main/java

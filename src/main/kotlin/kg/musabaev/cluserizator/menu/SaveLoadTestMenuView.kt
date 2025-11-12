@@ -1,20 +1,20 @@
 package kg.musabaev.cluserizator.menu
 
 import com.alibaba.fastjson2.JSON
-import com.alibaba.fastjson2.JSONReader.Feature.AllowUnQuotedFieldNames
-import com.alibaba.fastjson2.JSONWriter.Feature.UnquoteFieldName
 import javafx.collections.FXCollections.observableArrayList
 import javafx.fxml.Initializable
-import javafx.scene.control.*
+import javafx.scene.control.Alert
 import javafx.scene.control.Alert.AlertType.CONFIRMATION
-import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
-import kg.musabaev.cluserizator.domain.GraphClusters
+import javafx.scene.control.ButtonType
+import javafx.scene.control.Menu
+import javafx.scene.control.MenuItem
 import kg.musabaev.cluserizator.domain.GraphClusterItem
+import kg.musabaev.cluserizator.domain.GraphClusters
 import kg.musabaev.cluserizator.domain.SeoKeyword
 import kg.musabaev.cluserizator.file.CsvHandler
+import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
 import java.io.*
 import java.net.URL
-import java.nio.file.Files
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -35,7 +35,7 @@ private class SaveLoadTestMenuView() : MenuView(), Initializable {
                 MenuItem("Пример графа").apply { setOnAction {
                     val a = observableArrayList<SeoKeyword>()
                     TestCsvFileHandler().getLinesCsv().forEach { line ->
-                        val values = line.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toList()
+                        val values = line.split("\t".toRegex()).dropLastWhile { it.isEmpty() }.toList()
                         val otherMetas = values.subList(1, values.lastIndex - 1)
                         val keyword = values[0]
 

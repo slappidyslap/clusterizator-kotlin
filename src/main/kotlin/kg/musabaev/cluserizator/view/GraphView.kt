@@ -43,7 +43,7 @@ class GraphView() : BorderPane(), JavaView<GraphViewModel>, Initializable {
 
     override fun initialize(p0: URL?, p1: ResourceBundle?) {
         webEngine.load(this::class.java.getResource("graphView.html")!!.toString())
-        super.center = webView
+        center = webView
 
         webView.engine.loadWorker.stateProperty().addListener {_, _, newVal ->
             if (newVal == Worker.State.SUCCEEDED) {

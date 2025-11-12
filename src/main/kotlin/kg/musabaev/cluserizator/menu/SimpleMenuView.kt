@@ -15,8 +15,6 @@ import kg.musabaev.cluserizator.domain.component.NewProjectConfirmationDialog
 import kg.musabaev.cluserizator.domain.component.NewProjectConfirmationDialog.Type
 import kg.musabaev.cluserizator.file.CsvHandler
 import kg.musabaev.cluserizator.saveload.TestCsvFileHandler
-import kg.musabaev.cluserizator.util.executeScriptSafely
-import kg.musabaev.cluserizator.view.GraphView
 import java.io.*
 import java.net.URL
 import java.util.*
@@ -39,7 +37,7 @@ class SimpleMenuView() : MenuView(), Initializable {
                 MenuItem("Пример графа").apply { setOnAction {
                     val a = observableArrayList<SeoKeyword>()
                     TestCsvFileHandler().getLinesCsv().forEach { line ->
-                        val values = line.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toList()
+                        val values = line.split("\t".toRegex()).dropLastWhile { it.isEmpty() }.toList()
                         val otherMetas = values.subList(1, values.lastIndex - 1)
                         val keyword = values[0]
 
