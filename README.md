@@ -100,9 +100,11 @@ https://github.com/user-attachments/assets/4fc9119f-0e79-4bfd-80d9-4872ca1a6e91
 1. Сериализация — преобразует глобальный словарь кластеров в JSON/CSV формат
 
 **В JSON:**
+
 https://github.com/user-attachments/assets/340c5c0b-b0e5-42d3-b93b-2c1022eae30d
 
 **В CSV:**
+
 https://github.com/user-attachments/assets/9df858dd-26cc-4555-bd2e-0d88dc787a42
 
 ### Загрузка проекта
