@@ -99,8 +99,10 @@ https://github.com/user-attachments/assets/4fc9119f-0e79-4bfd-80d9-4872ca1a6e91
 
 1. Сериализация — преобразует глобальный словарь кластеров в JSON/CSV формат
 
+**В JSON:**
 https://github.com/user-attachments/assets/340c5c0b-b0e5-42d3-b93b-2c1022eae30d
 
+**В CSV:**
 https://github.com/user-attachments/assets/9df858dd-26cc-4555-bd2e-0d88dc787a42
 
 ### Загрузка проекта
@@ -110,6 +112,9 @@ https://github.com/user-attachments/assets/9df858dd-26cc-4555-bd2e-0d88dc787a42
 3. Обновление интерфейса — применяет восстановленную структуру в WebView
 
 https://github.com/user-attachments/assets/b4c434c8-b6f2-41eb-8f9b-e479171b255a
+
+При загрузка проекта из CSV файла, создается единственный `root` узел, внутри которого все ключевые слова.
+В конечном CSV файле не хранится данные о родительских и дочерних узлах графа.
 
 ## Визуализация и мост между JS и JavaFX (WebView)
 
